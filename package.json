@@ -36,6 +36,9 @@
       "plugin:@typescript-eslint/recommended",
       "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
+    "rules": {
+      "linebreak-style": 0
+    },
     "parserOptions": {
       "project": "./tsconfig.json"
     }
