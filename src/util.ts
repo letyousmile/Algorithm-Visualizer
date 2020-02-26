@@ -1,4 +1,6 @@
-export type graph = {
-    key: number;
-    value: number;
-}
+type bar = {
+  key: number;
+  value: number;
+};
+
+export { bar };
