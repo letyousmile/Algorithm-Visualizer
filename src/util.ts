@@ -1,6 +1,6 @@
-type bar = {
+type Bar = {
   key: number;
   value: number;
 };
 
-export { bar };
+export default Bar;
