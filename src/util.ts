@@ -2,5 +2,8 @@ type bar = {
   key: number;
   value: number;
 };
-
-export { bar };
+type dummy = {
+  key: number;
+  value: number;
+};
+export default bar;
