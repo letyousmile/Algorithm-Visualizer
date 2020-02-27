@@ -3,16 +3,36 @@ import {
   Link, Typography, makeStyles,
 } from '@material-ui/core/';
 
+
+const contributers = [
+  {
+    index: 0,
+    id: 'bcking92',
+    url: 'https://github.com/bcking92t',
+  },
+  {
+    index: 1,
+    id: 'sunghyun6',
+    url: 'https://github.com/letyousmile',
+  },
+  {
+    index: 2,
+    id: 'porori',
+    url: 'https://github.com/ckskal3',
+  },
+];
 function Copyright(): JSX.Element {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>
-      {' '}
+      {'Copyright '}
       {new Date().getFullYear()}
       .
+      {contributers.map((contributer) => (
+        <Link color="inherit" key={contributer.index} href={contributer.url}>
+          {`${contributer.id} `}
+        </Link>
+      ))}
+      All rights reserved.
     </Typography>
   );
 }
@@ -32,7 +52,7 @@ function Footer(): JSX.Element {
         Algorithm Visualizer
       </Typography>
       <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-        Something here to give the footer a purpose!
+        SSAFY 서울특별시 강남구 역삼동 테헤란로 212
       </Typography>
       <Copyright />
     </div>
