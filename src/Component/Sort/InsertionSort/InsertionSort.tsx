@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import InsertionSortBar from './InsertionSort/InsertionSortBars';
-import bar from '../../util';
+import InsertionSortBar from './InsertionSortBars';
+import bar from '../../../util';
 
 function ISort(): JSX.Element {
   const [graphBars, setBar] = useState<bar[]>(
