@@ -4,14 +4,31 @@ import bar from '../../../util';
 
 function ISort(): JSX.Element {
   const [graphBars, setBar] = useState<bar[]>(
-    [{ key: 1, value: 1 },
-      { key: 2, value: 3 },
-      { key: 3, value: 7 },
-      { key: 4, value: 11 },
-      { key: 5, value: 4 },
-      { key: 6, value: 2 },
-      { key: 7, value: 9 },
-      { key: 8, value: 5 },
+    [{
+      key: 0,
+      value: 5,
+      color: 'black',
+    },
+    {
+      key: 1,
+      value: 4,
+      color: 'black',
+    },
+    {
+      key: 2,
+      value: 3,
+      color: 'black',
+    },
+    {
+      key: 3,
+      value: 2,
+      color: 'black',
+    },
+    {
+      key: 4,
+      value: 1,
+      color: 'black',
+    },
     ],
   );
 
