@@ -14,7 +14,7 @@ function SSort(): JSX.Element {
     { id: 9, value: 10 },
     { id: 10, value: 3 }]);
 
-  const delay = (): Promise<any> => new Promise((resolve) => setTimeout(resolve, 500));
+  const delay = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 500));
 
   const tempDelay = async (): Promise<void> => {
     await delay();
