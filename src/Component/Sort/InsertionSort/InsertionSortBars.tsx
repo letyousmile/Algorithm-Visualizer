@@ -9,15 +9,15 @@ function InsertionSortBar({ graphBars }: any): JSX.Element {
     <div
       style={{
         position: 'absolute',
-        width: '100px',
-        height: `${(graphBar.value * 50)}px`,
+        width: '50px',
+        height: `${(graphBar.value * 50) + 50}px`,
         backgroundColor: graphBar.color,
         textAlign: 'center',
         color: 'black',
         border: '1px solid black',
-        transform: `translate(${graphBar.index * 100}px, 600px)`,
-        WebkitTransition: 'width 2s, height 2s, background-color 2s, -webkit-transform 1s',
-        transition: 'width 2s, height 2s, background-color 2s, transform 1s',
+        transform: `translate(${graphBar.index * 50 - graphBars.length * 25}px, 650px)`,
+        WebkitTransition: ' -webkit-transform 1s',
+        transition: 'transform 1s',
       }}
       key={graphBar.key.toString()}
     >
@@ -28,8 +28,6 @@ function InsertionSortBar({ graphBars }: any): JSX.Element {
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    // WebkitTransition: 'width 2s, height 2s, background-color 2s, -webkit-transform 2s',
-    // transition: 'width 2s, height 2s, background-color 2s, transform 2s',
   };
   return (
     <div style={flex}>
