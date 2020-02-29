@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
-import Bar from '../../util';
+import { Bar } from '../../util';
 
 function BSort(): JSX.Element {
   const [items, setItems] = useState<Bar[]>([
