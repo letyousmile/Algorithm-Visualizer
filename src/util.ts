@@ -9,4 +9,5 @@ export type InsertionSortGraphBar = {
   color: string;
   index: number;
   sorted: boolean;
+  height: number;
 };
