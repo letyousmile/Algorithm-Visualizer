@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PauseIcon from '@material-ui/icons/Pause';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SortBars from './SortBars';
 import { GraphBar, Process } from '../../util';
 import { makeRandomList, sort, rendering } from './UtilFunction';
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 // speed와 playing을 전역변수로 만든 이유는 함수안에서 선언하면 클로져 때문에 값을 도중에 바꿀 수가 없기 때문.
 let playing = false;
 let speed = 1000;
 
 function ISort(): JSX.Element {
+  const classes = useStyles();
   // 리스트 초기 변수
   const [graphBars, setBar] = useState<GraphBar[]>(makeRandomList);
   // 소팅 알고리즘의 현재 진행 정도를 저장해 놓는 변수.
@@ -72,11 +86,6 @@ function ISort(): JSX.Element {
       }
     }
   };
-  // 버튼 css
-  const button: any = {
-    height: '50px',
-    margin: '5px 5px',
-  };
   return (
     <div style={{
       height: '700px',
@@ -89,14 +98,22 @@ function ISort(): JSX.Element {
       }}
       >
         {/* 이동에 관한 함수는 stop상태에서만 조작할 수 있음 == (if (!playing)) */}
-        <button type="submit" style={button} onClick={(): void => { if (!playing) { play(); goTo(0); stop(); } }}>go to start</button>
-        <button type="submit" style={button} onClick={(): void => { if (!playing) { play(); goTo(nowDepth - 1); stop(); } }}>back</button>
-        <button type="submit" style={button} onClick={(): void => { stop(); }}>stop</button>
-        <button type="submit" style={button} onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>next</button>
-        <button type="submit" style={button} onClick={(): void => { if (!playing) { play(); flow(nowDepth); } }}>play</button>
-        <button type="submit" style={button} onClick={(): void => { makeRandomNumber(); stop(); }}>make random number</button>
-        <button type="submit" style={button} onClick={(): void => { if (speed < 2000) { speed += 100; } }}>slower</button>
-        <button type="submit" style={button} onClick={(): void => { if (speed > 100) { speed -= 100; } }}>faster</button>
+        <Button className={classes.button} size="medium" onClick={(): void => { if (!playing) { play(); goTo(0); stop(); } }}>시작으로 가기</Button>
+        <IconButton aria-label="skipPrevious" onClick={(): void => { if (!playing) { play(); goTo(nowDepth - 1); stop(); } }}>
+          <SkipPreviousIcon />
+        </IconButton>
+        <IconButton aria-label="playAndPause" onClick={(): void => { if (!playing) { play(); flow(nowDepth); } else { stop(); } }}>
+          {!playing
+          && <PlayArrowIcon />}
+          {playing
+          && <PauseIcon />}
+        </IconButton>
+        <IconButton aria-label="skipNext" onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>
+          <SkipNextIcon />
+        </IconButton>
+        <Button className={classes.button} size="medium" onClick={(): void => { makeRandomNumber(); stop(); }}>초기화 하기</Button>
+        <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
+        <Button className={classes.button} size="medium" onClick={(): void => { if (speed > 100) { speed -= 100; } }}>빠르게</Button>
       </div>
       <div style={{
         display: 'flex',
