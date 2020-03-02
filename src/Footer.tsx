@@ -8,7 +8,7 @@ const contributers = [
   {
     index: 0,
     id: 'bcking92',
-    url: 'https://github.com/bcking92t',
+    url: 'https://github.com/bcking92',
   },
   {
     index: 1,

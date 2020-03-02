@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Container, Typography, makeStyles } from '@material-ui/core';
 import { Transition, animated } from 'react-spring/renderprops';
 
-import Bar from '../../util';
+import { Bar } from '../../util';
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
