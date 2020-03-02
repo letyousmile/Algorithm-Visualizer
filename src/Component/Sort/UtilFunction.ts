@@ -79,6 +79,39 @@ export const sort = (list: GraphBar[], sortName: string): Process[] => {
       }
     }
   }
+  function selectionSort(): void{
+    for (let i = 0; i < arrayLength; i += 1) {
+      let min = i;
+      process.push({
+        arr: keyList.slice(), targets: [min, min], phase: 'compare',
+      });
+      for (let j = i + 1; j < arrayLength; j += 1) {
+        process.push({
+          arr: keyList.slice(), targets: [j, min], phase: 'compare',
+        });
+        if (list[keyList[min]].value > list[keyList[j]].value) {
+          process.push({
+            arr: keyList.slice(), targets: [min, j], phase: 'compare',
+          });
+          min = j;
+        }
+      }
+      // process.push({
+      //   arr: keyList.slice(), targets: [i, min], phase: 'compare',
+      // });
+
+      process.push({
+        arr: keyList.slice(), targets: [i, min], phase: 'change',
+      });
+
+      [keyList[min], keyList[i]] = [keyList[i], keyList[min]]; // swap
+
+
+    }
+    process.push({
+      arr: keyList.slice(), targets: [], phase: 'done',
+    });
+  }
   // 소팅 알고리즘 진행 정도 마다 상태 기억을 위해 [배열, targets, phase]를 저장한다.
   // 1. 배열에는 렌더링할 div의 key값을 소팅된 순서대로 저장하고
   // 2. targets에는 현재 비교연산중인 index,
@@ -93,7 +126,7 @@ export const sort = (list: GraphBar[], sortName: string): Process[] => {
       // insertionSort(process);
       break;
     case 'SSort':
-
+      selectionSort();
       break;
     case 'BSort':
       bubbleSort();
