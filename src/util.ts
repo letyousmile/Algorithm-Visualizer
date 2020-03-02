@@ -1,6 +1,7 @@
 export type Bar = {
   key: number;
   value: number;
+  color: string;
 };
 
 export type InsertionSortGraphBar = {
