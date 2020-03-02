@@ -1,10 +1,4 @@
-export type Bar = {
-  key: number;
-  value: number;
-  color: string;
-};
-
-export type InsertionSortGraphBar = {
+export type GraphBar = {
   key: number;
   value: number;
   color: string;
