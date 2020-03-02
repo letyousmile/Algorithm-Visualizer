@@ -30,5 +30,63 @@ export function bubbleSort(list: GraphBar[], keyList: number[]): Process[] {
   }
   return process;
 }
-export function selectionSort(list: GraphBar[], keyList: number[]): void{}
-export function insertionSort(list: GraphBar[], keyList: number[]): void{}
+export function selectionSort(list: GraphBar[], keyList: number[]): Process[] {
+  const arrayLength = keyList.length;
+  const process: Process[] = [];
+  process.push({
+    arr: keyList.slice(), targets: [arrayLength, arrayLength], phase: 'start',
+  });
+  for (let i = 0; i < arrayLength; i += 1) {
+    let min = i;
+    process.push({
+      arr: keyList.slice(), targets: [min, min], phase: 'compare',
+    });
+    for (let j = i + 1; j < arrayLength; j += 1) {
+      process.push({
+        arr: keyList.slice(), targets: [j, min], phase: 'compare',
+      });
+      if (list[keyList[min]].value > list[keyList[j]].value) {
+        process.push({
+          arr: keyList.slice(), targets: [min, j], phase: 'compare',
+        });
+        min = j;
+      }
+    }
+    process.push({
+      arr: keyList.slice(), targets: [i, min], phase: 'change',
+    });
+    [keyList[min], keyList[i]] = [keyList[i], keyList[min]]; // swap
+  }
+  process.push({
+    arr: keyList.slice(), targets: [], phase: 'done',
+  });
+  return process;
+}
+export function insertionSort(list: GraphBar[], keyList: number[]): Process[] {
+  const arrayLength = keyList.length;
+  const process: Process[] = [];
+  process.push({
+    arr: keyList.slice(), targets: [arrayLength, arrayLength], phase: 'start',
+  });
+  for (let i = 1; i < arrayLength; i += 1) {
+    for (let j = i - 1; j >= 0; j -= 1) {
+      process.push({
+        arr: keyList.slice(), targets: [j, j + 1], phase: 'compare',
+      });
+      if (list[keyList[j + 1]].value < list[keyList[j]].value) {
+        const temp = keyList[j + 1];
+        keyList[j + 1] = keyList[j];
+        keyList[j] = temp;
+        process.push({
+          arr: keyList.slice(), targets: [j, j + 1], phase: 'change',
+        });
+      } else {
+        process.push({
+          arr: keyList.slice(), targets: [j, j + 1], phase: 'insert',
+        });
+        break;
+      }
+    }
+  }
+  return process;
+}

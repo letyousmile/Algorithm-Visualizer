@@ -1,18 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Main from '../Main';
-import BSort from '../Component/Sort/BubbleSort2';
-import ISort from '../Component/Sort/InsertionSort/InsertionSort';
-import SSort from '../Component/Sort/SelectionSort';
+import SortView from '../Component/Sort/SortView';
 
 function Routes(): JSX.Element {
   return (
     <Router>
       <Switch>
         <Route exact path="/" component={Main} />
-        <Route path="/BSort" component={BSort} />
-        <Route path="/ISort" component={ISort} />
-        <Route path="/SSort" component={SSort} />
+        <Route path="/BSort" component={SortView} />
+        <Route path="/ISort" component={SortView} />
+        <Route path="/SSort" component={SortView} />
       </Switch>
     </Router>
   );
