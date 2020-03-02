@@ -6,3 +6,8 @@ export type GraphBar = {
   sorted: boolean;
   height: number;
 };
+export type Process = {
+  arr: number[];
+  targets: number[];
+  phase: string;
+};
