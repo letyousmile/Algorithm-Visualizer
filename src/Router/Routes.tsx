@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Main from '../Main';
-import BSort from '../Component/Sort/BubbleSort';
+import BSort from '../Component/Sort/BubbleSort2';
 import ISort from '../Component/Sort/InsertionSort/InsertionSort';
 import SSort from '../Component/Sort/SelectionSort';
 
