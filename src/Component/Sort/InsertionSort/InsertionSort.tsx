@@ -141,6 +141,10 @@ function ISort(): JSX.Element {
                 === wholeSortProcess[depth].targets[1]) {
                 temp[wholeSortProcess[depth].arr[i]].height = 0;
               }
+            } else if (wholeSortProcess[depth].phase === 'start') {
+              for (let j = 0; j < arrayLength; j += 1) {
+                temp[wholeSortProcess[depth].arr[j]].height = 0;
+              }
             }
           }
           setBar(temp);
