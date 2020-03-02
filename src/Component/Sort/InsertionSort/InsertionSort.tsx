@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import InsertionSortBar from './InsertionSortBars';
-import { InsertionSortGraphBar } from '../../../util';
+import InsertionSortBar from '../SortBars';
+import { GraphBar } from '../../../util';
 
 // speed와 playing을 전역변수로 만든 이유는 함수안에서 선언하면 클로져 때문에 값을 도중에 바꿀 수가 없기 때문.
 let playing = false;
 let speed = 1000;
 
 function ISort(): JSX.Element {
-  const [graphBars, setBar] = useState<InsertionSortGraphBar[]>(
+  const [graphBars, setBar] = useState<GraphBar[]>(
     [{
       key: 0, value: 1, color: '#f54141', index: 0, sorted: false, height: 0,
     },
@@ -173,7 +173,7 @@ function ISort(): JSX.Element {
 
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
   function makeRandomNumber(): void {
-    const temp: InsertionSortGraphBar[] = [];
+    const temp: GraphBar[] = [];
     for (let j = 0; j < 15; j += 1) {
       const tempBar = {
         key: j, value: Math.floor(Math.random() * 21), color: '#f54141', index: j, sorted: false, height: 0,

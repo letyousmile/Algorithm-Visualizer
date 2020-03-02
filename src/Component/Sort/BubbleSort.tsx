@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Container, Typography, makeStyles } from '@material-ui/core';
 import { Transition, animated } from 'react-spring/renderprops';
 
-import { Bar } from '../../util';
+import { GraphBar } from '../../util';
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function BSort(): JSX.Element {
-  const [items, setItems] = useState<Bar[]>([]);
+  const [items, setItems] = useState<GraphBar[]>([]);
   const len = 15;
   function makeItems(): void {
     for (let i = 0; i < len; i += 1) {
-      const item: Bar = {
+      const item: GraphBar = {
         key: i,
         value: Math.floor(Math.random() * 100),
         color: 'black',

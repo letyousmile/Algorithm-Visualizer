@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InsertionSortGraphBar } from '../../../util';
-// import { bar } from './util';
+import { GraphBar } from '../../util';
 
-
-function InsertionSortBar({ graphBars }: any): JSX.Element {
-  const inserttionSortBars = graphBars.map((graphBar: InsertionSortGraphBar) => (
+function SortBar({ graphBars }: any): JSX.Element {
+  const SortBars = graphBars.map((graphBar: GraphBar) => (
     <div
       style={{
         position: 'absolute',
@@ -38,12 +36,12 @@ function InsertionSortBar({ graphBars }: any): JSX.Element {
   };
   return (
     <div style={flex}>
-      {inserttionSortBars}
+      {SortBars}
     </div>
   );
 }
 
-InsertionSortBar.propTypes = {
+SortBar.propTypes = {
   graphBars: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
-export default InsertionSortBar;
+export default SortBar;
