@@ -26,6 +26,7 @@ let speed = 1000;
 let wholeSortProcess: Process[];
 // 소팅 알고리즘 상태를 기억하는 배열의 길이 변수화.
 let processLength: number;
+let initialization = false;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SortView(info: any): JSX.Element {
@@ -33,6 +34,15 @@ function SortView(info: any): JSX.Element {
   const classes = useStyles();
   // 리스트 초기 변수
   const [graphBars, setBar] = useState<GraphBar[]>(makeRandomList());
+
+  if (graphBars !== undefined) {
+    if (initialization) {
+      console.log('정렬다시함');
+      wholeSortProcess = sort(graphBars, pathName);
+      processLength = wholeSortProcess.length;
+    }
+  }
+
   const [nowDepth, setNowDepth] = useState<number>(0);
   const [nowPlaying, setNowPlaying] = useState<boolean>(playing);
   // 소팅 알고리즘의 모든 상태를 순서대로 기억하는 배열 [앞으로, 뒤로, 멈춤, 재생]을 가능하게 해주는 놈.
@@ -43,6 +53,7 @@ function SortView(info: any): JSX.Element {
   }
   // 소팅 알고리즘의 특정 부분으로 이동해주는 함수.
   function goTo(depth: number): void {
+    initialization = false;
     // stop이 눌러졌는지 확인.
     if (playing) {
       console.log(processLength);
@@ -58,16 +69,16 @@ function SortView(info: any): JSX.Element {
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
   function makeRandomNumber(): void {
     const temp: GraphBar[] = makeRandomList();
+    console.log(temp);
     setBar(temp);
     setDepth(0);
-    wholeSortProcess = sort(graphBars, pathName).slice();
-    processLength = wholeSortProcess.length;
-    console.log(processLength);
+    initialization = true;
   }
 
   // 멈추는 함수.
   function stop(): void {
     playing = false;
+    initialization = false;
     setNowPlaying(playing);
   }
 
@@ -79,6 +90,7 @@ function SortView(info: any): JSX.Element {
     }
     playing = true;
     setNowPlaying(playing);
+    initialization = false;
   }
   // 재귀를 이용해 goTo()함수를 연속적으로 호출하는 함수.
   const flow = (depth: number): void => {
@@ -113,16 +125,16 @@ function SortView(info: any): JSX.Element {
         <IconButton aria-label="skipPrevious" onClick={(): void => { if (!playing) { play(); goTo(nowDepth - 1); stop(); } }}>
           <SkipPreviousIcon />
         </IconButton>
-        <IconButton aria-label="playAndPause" onClick={(): void => { if (!playing) { play(); flow(nowDepth); } else { stop(); } }}>
+        <IconButton aria-label="playAndPause" onClick={(): void => { if (!playing) { play(); flow(nowDepth); initialization = false; } else { stop(); } }}>
           {!nowPlaying
-          && <PlayArrowIcon />}
+            && <PlayArrowIcon />}
           {nowPlaying
-          && <PauseIcon />}
+            && <PauseIcon />}
         </IconButton>
         <IconButton aria-label="skipNext" onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>
           <SkipNextIcon />
         </IconButton>
-        <Button className={classes.button} size="medium" onClick={(): void => { makeRandomNumber(); stop(); }}>초기화 하기</Button>
+        <Button className={classes.button} size="medium" onClick={(): void => { makeRandomNumber(); stop(); initialization = true; }}>초기화 하기</Button>
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed > 100) { speed -= 100; } }}>빠르게</Button>
       </div>

@@ -49,6 +49,14 @@ const items = [
   },
   {
     index: 3,
+    name: '합병정렬',
+    path: '/MSort',
+    img: '',
+    desc: '분할정복을 이용하여 정렬하는 방법입니다.'
+    + '자료 배열을 작은 단위로 쪼개어 정렬하고 합치는 방식으로 작동합니다.',
+  },
+  {
+    index: 4,
     name: '퀵정렬',
     path: '/QSort',
     img: '',

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { GraphBar, Process } from '../../util';
 import {
-  bubbleSort, selectionSort, insertionSort, quickSort,
+  bubbleSort, selectionSort, insertionSort, quickSort, mergeSort,
 } from './SortAlgorithm';
 
 export function makeRandomList(): GraphBar[] {
@@ -30,9 +30,9 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
       // 소팅 알고리즘 진행 상황에따라 그래프의 색과 높이 변경.
       if (process[depth].phase === 'change') {
         if (list[process[depth].arr[i]].index
-                  === process[depth].targets[0]
-                  || list[process[depth].arr[i]].index
-                  === process[depth].targets[1]) {
+          === process[depth].targets[0]
+          || list[process[depth].arr[i]].index
+          === process[depth].targets[1]) {
           list[process[depth].arr[i]].color = '#2ee22e';
           if (process[depth].targets[1] === 1) {
             list[process[depth].arr[i]].height = 0;
@@ -40,17 +40,48 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
         }
       } else if (process[depth].phase === 'compare') {
         if (list[process[depth].arr[i]].index
-                  === process[depth].targets[1]) {
+          === process[depth].targets[1]) {
           list[process[depth].arr[i]].height = SORT_HEIGHT;
           list[process[depth].arr[i]].color = '#ff9400';
         } else if (list[process[depth].arr[i]].index
-                  === process[depth].targets[0]) {
+          === process[depth].targets[0]) {
+          list[process[depth].arr[i]].color = '#ff9400';
+        }
+      } else if (process[depth].phase === 'merge') {
+        if (list[process[depth].arr[i]].index
+          === process[depth].targets[1]) {
+          list[process[depth].arr[i]].height = SORT_HEIGHT;
+          list[process[depth].arr[i]].color = '#ff9400';
+        } else if (list[process[depth].arr[i]].index
+          === process[depth].targets[0]) {
+          list[process[depth].arr[i]].color = '#ff9400';
+        }
+      } else if (process[depth].phase === 'insrt-compare') {
+        if (list[process[depth].arr[i]].index
+          === process[depth].targets[1]) {
+          list[process[depth].arr[i]].height = 50;
+          list[process[depth].arr[i]].color = '#ff9400';
+        } else if (list[process[depth].arr[i]].index
+          === process[depth].targets[0]) {
           list[process[depth].arr[i]].color = '#ff9400';
         }
       } else if (process[depth].phase === 'insert') {
         if (list[process[depth].arr[i]].index
-                  === process[depth].targets[1]) {
+          === process[depth].targets[1]) {
           list[process[depth].arr[i]].height = 0;
+        }
+      } else if (process[depth].phase === 'up') {
+        for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
+          if (list[process[depth].arr[i]].index === j) {
+            list[process[depth].arr[i]].height = 0;
+            list[process[depth].arr[i]].color = '#2ee22e';
+          }
+        }
+      } else if (process[depth].phase === 'down') {
+        for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
+          if (list[process[depth].arr[i]].index === j) {
+            list[process[depth].arr[i]].height = 50;
+          }
         }
       } else if (process[depth].phase === 'start') {
         for (let j = 0; j < list.length; j += 1) {
@@ -76,6 +107,9 @@ export const sort = (list: GraphBar[], sortName: string): Process[] => {
       break;
     case 'QSort':
       process = quickSort(list, keyList, 0, list.length - 1, process);
+      break;
+    case 'MSort':
+      process = mergeSort(list, keyList);
       break;
     default:
       break;

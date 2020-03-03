@@ -71,7 +71,7 @@ export function insertionSort(list: GraphBar[], keyList: number[]): Process[] {
   for (let i = 1; i < arrayLength; i += 1) {
     for (let j = i - 1; j >= 0; j -= 1) {
       process.push({
-        arr: keyList.slice(), targets: [j, j + 1], phase: 'compare',
+        arr: keyList.slice(), targets: [j, j + 1], phase: 'insrt-compare',
       });
       if (list[keyList[j + 1]].value < list[keyList[j]].value) {
         const temp = keyList[j + 1];
@@ -132,5 +132,73 @@ export function quickSort(list: GraphBar[], keyList: number[],
     quickSort(list, keyList, left, q - 1, process);
     quickSort(list, keyList, q + 1, right, process);
   }
+  return process;
+}
+
+export function mergeSort(list: GraphBar[], keyList: number[]): Process[] {
+  const arrayLength = keyList.length;
+  const process: Process[] = [];
+  process.push({
+    arr: keyList.slice(), targets: [arrayLength, arrayLength], phase: 'start',
+  });
+  const sorted = keyList.slice();
+
+  const merge = (listt: number[], left: number, mid: number, right: number): void => {
+    let i = left;
+    let j = mid + 1;
+    let k = left;
+    while (i <= mid && j <= right) {
+      process.push({
+        arr: keyList.slice(), targets: [i, j], phase: 'merge-compare',
+      });
+      if (list[listt[i]].value <= list[listt[j]].value) {
+        sorted[k] = listt[i];
+        k += 1;
+        i += 1;
+      } else {
+        sorted[k] = listt[j];
+        k += 1;
+        j += 1;
+      }
+      process.push({
+        arr: sorted.slice(), targets: [k, k], phase: 'down',
+      });
+    }
+    if (i > mid) {
+      for (let l = j; l <= right; l += 1) {
+        sorted[k] = listt[l];
+        process.push({
+          arr: sorted.slice(), targets: [k, k], phase: 'down',
+        });
+        k += 1;
+      }
+    } else {
+      for (let l = i; l <= mid; l += 1) {
+        sorted[k] = listt[l];
+        process.push({
+          arr: sorted.slice(), targets: [k, k], phase: 'down',
+        });
+        k += 1;
+      }
+    }
+    keyList = sorted.slice();
+
+    process.push({
+      arr: keyList.slice(), targets: [left, right], phase: 'up',
+    });
+  };
+
+  const divide = (left: number, right: number): void => {
+    if (left < right) {
+      const mid = Math.floor((left + right) / 2);
+      divide(left, mid);
+      divide(mid + 1, right);
+      merge(keyList, left, mid, right);
+    }
+  };
+  divide(0, arrayLength - 1);
+  process.push({
+    arr: keyList.slice(), targets: [arrayLength, arrayLength], phase: 'done',
+  });
   return process;
 }
