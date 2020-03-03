@@ -22,20 +22,20 @@ const useStyles = makeStyles((theme) => ({
 let playing = false;
 let speed = 1000;
 
+// 소팅 알고리즘의 현재 진행 정도를 저장해 놓는 변수.
+let wholeSortProcess: Process[];
+// 소팅 알고리즘 상태를 기억하는 배열의 길이 변수화.
+let processLength: number;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SortView(info: any): JSX.Element {
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
   // 리스트 초기 변수
-  const [graphBars, setBar] = useState<GraphBar[]>(makeRandomList);
-  // 소팅 알고리즘의 현재 진행 정도를 저장해 놓는 변수.
+  const [graphBars, setBar] = useState<GraphBar[]>(makeRandomList());
   const [nowDepth, setNowDepth] = useState<number>(0);
   const [nowPlaying, setNowPlaying] = useState<boolean>(playing);
   // 소팅 알고리즘의 모든 상태를 순서대로 기억하는 배열 [앞으로, 뒤로, 멈춤, 재생]을 가능하게 해주는 놈.
-  let wholeSortProcess: Process[] = sort(graphBars, pathName);
-  // 소팅 알고리즘 상태를 기억하는 배열의 길이 변수화.
-  let processLength = wholeSortProcess.length;
-  // 소팅 알고리즘의 현재 진행 정도를 저장하는 함수.
   function setDepth(depth: number): void {
     if (depth <= processLength - 1) {
       setNowDepth(depth);
@@ -45,11 +45,12 @@ function SortView(info: any): JSX.Element {
   function goTo(depth: number): void {
     // stop이 눌러졌는지 확인.
     if (playing) {
+      console.log(processLength);
       // 상태기억 배열의 길이를 벗어하는 depth가 들어왔는지 확인.
       if (depth < processLength && depth > -1) {
         // 현재 depth 저장.
         setDepth(depth);
-        setBar(rendering(graphBars, wholeSortProcess, depth));
+        setBar(rendering(graphBars, wholeSortProcess.slice(), depth));
       }
     }
   }
@@ -59,8 +60,9 @@ function SortView(info: any): JSX.Element {
     const temp: GraphBar[] = makeRandomList();
     setBar(temp);
     setDepth(0);
-    wholeSortProcess = sort(graphBars, pathName);
+    wholeSortProcess = sort(graphBars, pathName).slice();
     processLength = wholeSortProcess.length;
+    console.log(processLength);
   }
 
   // 멈추는 함수.
@@ -71,6 +73,10 @@ function SortView(info: any): JSX.Element {
 
   // 멈춤 flag를 해제하는 함수.(진행하는 함수 아니고 멈춤을 해제하는거임)
   function play(): void {
+    if (processLength === undefined) {
+      wholeSortProcess = sort(graphBars, pathName);
+      processLength = wholeSortProcess.length;
+    }
     playing = true;
     setNowPlaying(playing);
   }
