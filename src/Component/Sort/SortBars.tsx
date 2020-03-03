@@ -9,7 +9,7 @@ function SortBar({ graphBars }: any): JSX.Element {
       style={{
         position: 'absolute',
         width: '50px',
-        height: `${(graphBar.value * 20) + 50}px`,
+        height: `${(graphBar.value * 10) + 50}px`,
         backgroundColor: graphBar.color,
         textAlign: 'center',
         color: 'black',

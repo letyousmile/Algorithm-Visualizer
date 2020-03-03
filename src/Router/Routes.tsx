@@ -11,6 +11,7 @@ function Routes(): JSX.Element {
         <Route path="/BSort" component={SortView} />
         <Route path="/ISort" component={SortView} />
         <Route path="/SSort" component={SortView} />
+        <Route path="/MSort" component={SortView} />
       </Switch>
     </Router>
   );
