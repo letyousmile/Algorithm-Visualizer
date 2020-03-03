@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
 import { GraphBar, Process } from '../../util';
-import { bubbleSort, selectionSort, insertionSort } from './SortAlgorithm';
+import {
+  bubbleSort, selectionSort, insertionSort, quickSort, mergeSort,
+} from './SortAlgorithm';
 
 export function makeRandomList(): GraphBar[] {
   const list: GraphBar[] = [];
-  for (let j = 0; j < 15; j += 1) {
+  for (let j = 0; j < 10; j += 1) {
     const tempBar = {
       key: j, value: Math.floor(Math.random() * 21), color: '#f54141', index: j, sorted: false, height: 0,
     };
@@ -28,9 +30,9 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
       // 소팅 알고리즘 진행 상황에따라 그래프의 색과 높이 변경.
       if (process[depth].phase === 'change') {
         if (list[process[depth].arr[i]].index
-                  === process[depth].targets[0]
-                  || list[process[depth].arr[i]].index
-                  === process[depth].targets[1]) {
+          === process[depth].targets[0]
+          || list[process[depth].arr[i]].index
+          === process[depth].targets[1]) {
           list[process[depth].arr[i]].color = '#2ee22e';
           if (process[depth].targets[1] === 1) {
             list[process[depth].arr[i]].height = 0;
@@ -38,17 +40,48 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
         }
       } else if (process[depth].phase === 'compare') {
         if (list[process[depth].arr[i]].index
-                  === process[depth].targets[1]) {
+          === process[depth].targets[1]) {
           list[process[depth].arr[i]].height = SORT_HEIGHT;
           list[process[depth].arr[i]].color = '#ff9400';
         } else if (list[process[depth].arr[i]].index
-                  === process[depth].targets[0]) {
+          === process[depth].targets[0]) {
+          list[process[depth].arr[i]].color = '#ff9400';
+        }
+      } else if (process[depth].phase === 'merge') {
+        if (list[process[depth].arr[i]].index
+          === process[depth].targets[1]) {
+          list[process[depth].arr[i]].height = SORT_HEIGHT;
+          list[process[depth].arr[i]].color = '#ff9400';
+        } else if (list[process[depth].arr[i]].index
+          === process[depth].targets[0]) {
+          list[process[depth].arr[i]].color = '#ff9400';
+        }
+      } else if (process[depth].phase === 'insrt-compare') {
+        if (list[process[depth].arr[i]].index
+          === process[depth].targets[1]) {
+          list[process[depth].arr[i]].height = 50;
+          list[process[depth].arr[i]].color = '#ff9400';
+        } else if (list[process[depth].arr[i]].index
+          === process[depth].targets[0]) {
           list[process[depth].arr[i]].color = '#ff9400';
         }
       } else if (process[depth].phase === 'insert') {
         if (list[process[depth].arr[i]].index
-                  === process[depth].targets[1]) {
+          === process[depth].targets[1]) {
           list[process[depth].arr[i]].height = 0;
+        }
+      } else if (process[depth].phase === 'up') {
+        for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
+          if (list[process[depth].arr[i]].index === j) {
+            list[process[depth].arr[i]].height = 0;
+            list[process[depth].arr[i]].color = '#2ee22e';
+          }
+        }
+      } else if (process[depth].phase === 'down') {
+        for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
+          if (list[process[depth].arr[i]].index === j) {
+            list[process[depth].arr[i]].height = 50;
+          }
         }
       } else if (process[depth].phase === 'start') {
         for (let j = 0; j < list.length; j += 1) {
@@ -62,12 +95,6 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
 export const sort = (list: GraphBar[], sortName: string): Process[] => {
   const keyList = list.map((el) => el.key);
   let process: Process[] = [];
-  // 소팅 알고리즘 진행 정도 마다 상태 기억을 위해 [배열, targets, phase]를 저장한다.
-  // 1. 배열에는 렌더링할 div의 key값을 소팅된 순서대로 저장하고
-  // 2. targets에는 현재 비교연산중인 index,
-  // 3. phase에는 소팅 알고리즘이 뭘 하고있는지 저장한다.
-  // 배열, phase, targets를 토대로 div의 색과 위치를 결정한다.
-  // phase를 만든 것은 나중에 소팅에 대한 단계별 설명을 쓸 때 확장성있게 사용할 수 있기 때문.
   switch (sortName) {
     case 'ISort':
       process = insertionSort(list, keyList);
@@ -79,6 +106,10 @@ export const sort = (list: GraphBar[], sortName: string): Process[] => {
       process = bubbleSort(list, keyList);
       break;
     case 'QSort':
+      process = quickSort(list, keyList, 0, list.length - 1, process);
+      break;
+    case 'MSort':
+      process = mergeSort(list, keyList);
       break;
     default:
       break;

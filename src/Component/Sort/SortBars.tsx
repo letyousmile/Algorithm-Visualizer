@@ -7,14 +7,15 @@ function SortBar({ graphBars }: any): JSX.Element {
   const SortBars = graphBars.map((graphBar: GraphBar) => (
     <div
       style={{
+        bottom: '480px',
         position: 'absolute',
         width: '50px',
-        height: `${(graphBar.value * 10) + 50}px`,
+        height: `${(graphBar.value * 20) + 50}px`,
         backgroundColor: graphBar.color,
         textAlign: 'center',
         color: 'black',
         border: '1px solid black',
-        transform: `translate(${graphBar.index * 50 - graphBars.length * 25}px, ${(window.innerHeight / 2) * 1.3 + graphBar.height}px)`,
+        transform: `translate(${graphBar.index * 50 - graphBars.length * 25}px, ${(window.innerHeight / 5) * 1.3 + graphBar.height}px)`,
         WebkitTransition: ' -webkit-transform 0.2s',
         transition: 'transform 0.2s',
       }}
