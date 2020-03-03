@@ -4,16 +4,120 @@ import {
   bubbleSort, selectionSort, insertionSort, quickSort, mergeSort,
 } from './SortAlgorithm';
 
-export function makeRandomList(): GraphBar[] {
-  const list: GraphBar[] = [];
-  for (let j = 0; j < 10; j += 1) {
-    const tempBar = {
-      key: j, value: Math.floor(Math.random() * 21), color: '#f54141', index: j, sorted: false, height: 0,
-    };
-    list.push(tempBar);
+export function makeRandomList(howSorted = 'random'): GraphBar[] {
+  let list: GraphBar[] = [];
+  function random(): GraphBar[] {
+    const tempList: GraphBar[] = [];
+    for (let j = 0; j < 10; j += 1) {
+      const tempBar = {
+        key: j, value: Math.floor(Math.random() * 21), color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function increasing(): GraphBar[] {
+    let k = 0;
+    const tempList: GraphBar[] = [];
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (6 - k)) + k;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (11 - k)) + k;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (16 - k)) + k;
+      } else {
+        k = Math.floor(Math.random() * (21 - k)) + k;
+      }
+      const tempBar = {
+        key: j, value: k, color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function nearlyIncreasing(): GraphBar[] {
+    let k = 0;
+    const tempList: GraphBar[] = [];
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (3 - k)) + k;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (8 - k)) + k;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (13 - k)) + k;
+      } else {
+        k = Math.floor(Math.random() * (18 - k)) + k;
+      }
+      const tempBar = {
+        key: j, value: k + Math.floor(Math.random() * 4), color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function decreasing(): GraphBar[] {
+    const tempList: GraphBar[] = [];
+    let k = 21;
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (k - 16)) + 16;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (k - 11)) + 11;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (k - 6)) + 6;
+      } else {
+        k = Math.floor(Math.random() * (k)) + 0;
+      }
+      const tempBar = {
+        key: j, value: k, color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function nearlyDecreasing(): GraphBar[] {
+    const tempList: GraphBar[] = [];
+    let k = 18;
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (k - 15)) + 15;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (k - 10)) + 10;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (k - 5)) + 5;
+      } else {
+        k = Math.floor(Math.random() * (k)) + 0;
+      }
+      const tempBar = {
+        key: j, value: k + Math.floor(Math.random() * 4), color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  switch (howSorted) {
+    case 'random':
+      list = random();
+      break;
+    case 'increasing':
+      list = increasing();
+      break;
+    case 'decreasing':
+      list = decreasing();
+      break;
+    case 'nearlyIncreasing':
+      list = nearlyIncreasing();
+      break;
+    case 'nearlyDecreasing':
+      list = nearlyDecreasing();
+      break;
+    default:
+      break;
   }
   return list;
 }
+
 export function rendering(list: GraphBar[], process: Process[], depth: number): GraphBar[] {
   const SORT_HEIGHT = 0;
   // 소팅이 끝났으면 모든 그래프를 초록색으로 변환.
