@@ -23,10 +23,12 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
     }
   } else {
     for (let i = 0; i < list.length; i += 1) {
-      // 먼저 막대 빨간색으로 초기화
-      list[process[depth].arr[i]].color = '#f54141';
-      // 그래프의 위치 인덱스 변경.
-      list[process[depth].arr[i]].index = i;
+      if (process[depth].phase !== 'merge-down') {
+        // 그래프의 위치 인덱스 변경.
+        list[process[depth].arr[i]].index = i;
+        // 먼저 막대 빨간색으로 초기화
+        list[process[depth].arr[i]].color = '#f54141';
+      }
       // 소팅 알고리즘 진행 상황에따라 그래프의 색과 높이 변경.
       if (process[depth].phase === 'change') {
         if (list[process[depth].arr[i]].index
@@ -47,10 +49,9 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
           === process[depth].targets[0]) {
           list[process[depth].arr[i]].color = '#ff9400';
         }
-      } else if (process[depth].phase === 'merge') {
+      } else if (process[depth].phase === 'merge-compare') {
         if (list[process[depth].arr[i]].index
           === process[depth].targets[1]) {
-          list[process[depth].arr[i]].height = SORT_HEIGHT;
           list[process[depth].arr[i]].color = '#ff9400';
         } else if (list[process[depth].arr[i]].index
           === process[depth].targets[0]) {
@@ -70,18 +71,20 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
           === process[depth].targets[1]) {
           list[process[depth].arr[i]].height = 0;
         }
-      } else if (process[depth].phase === 'up') {
+      } else if (process[depth].phase === 'merge-up') {
         for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
           if (list[process[depth].arr[i]].index === j) {
             list[process[depth].arr[i]].height = 0;
             list[process[depth].arr[i]].color = '#2ee22e';
           }
         }
-      } else if (process[depth].phase === 'down') {
-        for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
-          if (list[process[depth].arr[i]].index === j) {
-            list[process[depth].arr[i]].height = 50;
-          }
+      } else if (process[depth].phase === 'merge-down') {
+        if (list[process[depth].arr[i]].index === process[depth].targets[1]
+          && list[process[depth].arr[i]].height === 0) {
+          const changeTo = process[depth].targets[0];
+          list[process[depth].arr[i]].index = changeTo;
+          list[process[depth].arr[i]].height = 50;
+          list[process[depth].arr[i]].color = '#ff9400';
         }
       } else if (process[depth].phase === 'start') {
         for (let j = 0; j < list.length; j += 1) {
