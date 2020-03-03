@@ -90,3 +90,98 @@ export function insertionSort(list: GraphBar[], keyList: number[]): Process[] {
   }
   return process;
 }
+
+function heapify(graphBars: GraphBar[], keyList: number[], idx: number, process: Process[]): number[] {
+  let parent = Math.floor((idx - 1) / 2);
+  let tIdx = idx;
+  const tKey = keyList.slice();
+  while (tIdx > 0 && parent > -1) {
+    process.push({
+      arr: tKey.slice(), targets: [tIdx, parent], phase: 'compare',
+    });
+    if (graphBars[tKey[parent]].value < graphBars[tKey[tIdx]].value) {
+      process.push({
+        arr: tKey.slice(), targets: [parent, tIdx], phase: 'change',
+      });
+      [tKey[parent], tKey[tIdx]] = [tKey[tIdx], tKey[parent]];
+      tIdx = parent;
+      parent = Math.floor((tIdx - 1) / 2);
+    } else {
+      break;
+    }
+  }
+  return tKey;
+}
+function heapify2(graphBars: GraphBar[], keyList: number[], process: Process[]): number[] {
+  const tKey = keyList.slice();
+  let idx = 0;
+  let left = idx * 2 + 1;
+  let right = idx * 2 + 2;
+
+  while (left < tKey.length) {
+    if (right < tKey.length) { // 자식이 둘다 존재
+      const max = graphBars[tKey[left]].value > graphBars[tKey[right]].value ? left : right;
+      process.push({
+        arr: tKey.slice(), targets: [idx, max], phase: 'compare',
+      });
+      if (graphBars[tKey[idx]].value >= graphBars[tKey[max]].value) {
+        break;
+      }
+      process.push({
+        arr: tKey.slice(), targets: [idx, max], phase: 'change',
+      });
+      [tKey[idx], tKey[max]] = [tKey[max], tKey[idx]];
+      idx = max;
+      left = idx * 2 + 1;
+      right = idx * 2 + 2;
+    } else { // 자식이 좌측만 존재
+      process.push({
+        arr: tKey.slice(), targets: [idx, left], phase: 'compare',
+      });
+      if (graphBars[tKey[idx]].value < graphBars[tKey[left]].value) {
+        process.push({
+          arr: tKey.slice(), targets: [idx, left], phase: 'compare',
+        });
+        [tKey[idx], tKey[left]] = [tKey[left], tKey[idx]];
+      }
+      break;
+    }
+  }
+
+  return tKey;
+}
+
+export function heapSort(graphBars: GraphBar[]): Process[] {
+  // 부모노드와 비교 해서 자신이 크면 바꿈
+  // 자신의 자식노드 중 큰 노드가 자신보다 크면 변경
+  // 변경후 다시 자식노드들과 비교해서 큰 노드가 있다면 다시 변경
+  // 최상단까지 진행
+  let keyList: number[] = [];
+  const arrayLength = graphBars.length;
+  const process: Process[] = [];
+  process.push({
+    arr: keyList.slice(), targets: [0, 0], phase: 'insert',
+  });
+
+  for (let i = 0; i < arrayLength; i += 1) {
+    keyList.push(graphBars[i].key);
+    process.push({
+      arr: keyList.slice(), targets: [i, i], phase: 'insert',
+    });
+    keyList = heapify(graphBars, keyList, i, process).slice();
+  }
+
+  while (keyList.length > 0) {
+    process.push({
+      arr: keyList.slice(), targets: [keyList[0], keyList[keyList.length - 1]], phase: 'change',
+    });
+    [keyList[0], keyList[keyList.length - 1]] = [keyList[keyList.length - 1], keyList[0]];
+    process.push({
+      arr: keyList.slice(), targets: [keyList[keyList.length - 1], keyList[keyList.length - 1]], phase: 'remove',
+    });
+    keyList.pop();
+    keyList = heapify2(graphBars, keyList, process).slice();
+  }
+
+  return process;
+}
