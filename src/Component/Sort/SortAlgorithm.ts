@@ -90,3 +90,47 @@ export function insertionSort(list: GraphBar[], keyList: number[]): Process[] {
   }
   return process;
 }
+export function quickSort(list: GraphBar[], keyList: number[],
+  left: number, right: number, process: Process[]): Process[] {
+  function partition(partitionLeft: number, partitionRight: number): number {
+    let low = partitionLeft;
+    let high = partitionRight + 1;
+    const pivot = partitionLeft;
+    const pivotValue = list[keyList[pivot]].value;
+    do {
+      do {
+        low += 1;
+        process.push({
+          arr: keyList.slice(), targets: [pivot, low], phase: 'compare',
+        });
+      } while (low <= right && list[keyList[low]].value < pivotValue);
+      do {
+        high -= 1;
+        process.push({
+          arr: keyList.slice(), targets: [pivot, high], phase: 'compare',
+        });
+      } while (high >= left && list[keyList[high]].value > pivotValue);
+      if (low < high) {
+        const temp = keyList[low];
+        keyList[low] = keyList[high];
+        keyList[high] = temp;
+        process.push({
+          arr: keyList.slice(), targets: [low, high], phase: 'change',
+        });
+      }
+    } while (low < high);
+    const temp = keyList[left];
+    keyList[left] = keyList[high];
+    keyList[high] = temp;
+    process.push({
+      arr: keyList.slice(), targets: [left, high], phase: 'change',
+    });
+    return high;
+  }
+  if (left < right) {
+    const q = partition(left, right);
+    quickSort(list, keyList, left, q - 1, process);
+    quickSort(list, keyList, q + 1, right, process);
+  }
+  return process;
+}
