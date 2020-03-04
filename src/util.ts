@@ -22,11 +22,13 @@ export type Line = {
   key: number;
   existed: boolean;
   color: string;
+  from: number;
+  to: number;
 };
 export type GProcess = {
   visitedNode: number[];
   visitedLine: number[];
   targetNodes: number[];
-  targetNode: number;
+  targetLine: number;
   phase: string;
 };
