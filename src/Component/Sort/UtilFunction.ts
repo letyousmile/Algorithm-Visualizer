@@ -118,78 +118,78 @@ export function makeRandomList(howSorted = 'random'): GraphBar[] {
   return list;
 }
 
-export function rendering(list: GraphBar[], process: Process[], depth: number): GraphBar[] {
+export function rendering(list: GraphBar[], process: Process): GraphBar[] {
   // 소팅이 끝났으면 모든 그래프를 초록색으로 변환.
-  if (process[depth].phase === 'done') {
+  if (process.phase === 'done') {
     for (let i = 0; i < list.length; i += 1) {
-      list[process[depth].arr[i]].color = '#2ee22e';
+      list[process.arr[i]].color = '#2ee22e';
     }
   } else {
     for (let i = 0; i < list.length; i += 1) {
-      if (process[depth].phase !== 'merge-down') {
+      if (process.phase !== 'merge-down') {
         // 그래프의 위치 인덱스 변경.
-        list[process[depth].arr[i]].index = i;
+        list[process.arr[i]].index = i;
         // 먼저 막대 빨간색으로 초기화
-        list[process[depth].arr[i]].color = '#f54141';
+        list[process.arr[i]].color = '#f54141';
       }
       // 소팅 알고리즘 진행 상황에따라 그래프의 색과 높이 변경.
-      if (process[depth].phase === 'change') {
-        if (list[process[depth].arr[i]].index
-          === process[depth].targets[0]
-          || list[process[depth].arr[i]].index
-          === process[depth].targets[1]) {
-          list[process[depth].arr[i]].color = '#2ee22e';
-          if (process[depth].targets[1] === 1) {
-            list[process[depth].arr[i]].height = 0;
+      if (process.phase === 'change') {
+        if (list[process.arr[i]].index
+          === process.targets[0]
+          || list[process.arr[i]].index
+          === process.targets[1]) {
+          list[process.arr[i]].color = '#2ee22e';
+          if (process.targets[1] === 1) {
+            list[process.arr[i]].height = 0;
           }
         }
-      } else if (process[depth].phase === 'compare') {
-        for (let j = 0; j < process[depth].targets.length; j += 1) {
-          if (list[process[depth].arr[i]].index === process[depth].targets[j]) {
-            list[process[depth].arr[i]].height = 0;
-            list[process[depth].arr[i]].color = '#ff9400';
+      } else if (process.phase === 'compare') {
+        for (let j = 0; j < process.targets.length; j += 1) {
+          if (list[process.arr[i]].index === process.targets[j]) {
+            list[process.arr[i]].height = 0;
+            list[process.arr[i]].color = '#ff9400';
           }
         }
-      } else if (process[depth].phase === 'merge-compare') {
-        if (list[process[depth].arr[i]].index
-          === process[depth].targets[1]) {
-          list[process[depth].arr[i]].color = '#ff9400';
-        } else if (list[process[depth].arr[i]].index
-          === process[depth].targets[0]) {
-          list[process[depth].arr[i]].color = '#ff9400';
+      } else if (process.phase === 'merge-compare') {
+        if (list[process.arr[i]].index
+          === process.targets[1]) {
+          list[process.arr[i]].color = '#ff9400';
+        } else if (list[process.arr[i]].index
+          === process.targets[0]) {
+          list[process.arr[i]].color = '#ff9400';
         }
-      } else if (process[depth].phase === 'insrt-compare') {
-        if (list[process[depth].arr[i]].index
-          === process[depth].targets[1]) {
-          list[process[depth].arr[i]].height = 50;
-          list[process[depth].arr[i]].color = '#ff9400';
-        } else if (list[process[depth].arr[i]].index
-          === process[depth].targets[0]) {
-          list[process[depth].arr[i]].color = '#ff9400';
+      } else if (process.phase === 'insrt-compare') {
+        if (list[process.arr[i]].index
+          === process.targets[1]) {
+          list[process.arr[i]].height = 50;
+          list[process.arr[i]].color = '#ff9400';
+        } else if (list[process.arr[i]].index
+          === process.targets[0]) {
+          list[process.arr[i]].color = '#ff9400';
         }
-      } else if (process[depth].phase === 'insert') {
-        if (list[process[depth].arr[i]].index
-          === process[depth].targets[1]) {
-          list[process[depth].arr[i]].height = 0;
+      } else if (process.phase === 'insert') {
+        if (list[process.arr[i]].index
+          === process.targets[1]) {
+          list[process.arr[i]].height = 0;
         }
-      } else if (process[depth].phase === 'merge-up') {
-        for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
-          if (list[process[depth].arr[i]].index === j) {
-            list[process[depth].arr[i]].height = 0;
-            list[process[depth].arr[i]].color = '#2ee22e';
+      } else if (process.phase === 'merge-up') {
+        for (let j = process.targets[0]; j <= process.targets[1]; j += 1) {
+          if (list[process.arr[i]].index === j) {
+            list[process.arr[i]].height = 0;
+            list[process.arr[i]].color = '#2ee22e';
           }
         }
-      } else if (process[depth].phase === 'merge-down') {
-        if (list[process[depth].arr[i]].index === process[depth].targets[1]
-          && list[process[depth].arr[i]].height === 0) {
-          const changeTo = process[depth].targets[0];
-          list[process[depth].arr[i]].index = changeTo;
-          list[process[depth].arr[i]].height = 50;
-          list[process[depth].arr[i]].color = '#ff9400';
+      } else if (process.phase === 'merge-down') {
+        if (list[process.arr[i]].index === process.targets[1]
+          && list[process.arr[i]].height === 0) {
+          const changeTo = process.targets[0];
+          list[process.arr[i]].index = changeTo;
+          list[process.arr[i]].height = 50;
+          list[process.arr[i]].color = '#ff9400';
         }
-      } else if (process[depth].phase === 'start') {
+      } else if (process.phase === 'start') {
         for (let j = 0; j < list.length; j += 1) {
-          list[process[depth].arr[j]].height = 0;
+          list[process.arr[j]].height = 0;
         }
       }
     }
