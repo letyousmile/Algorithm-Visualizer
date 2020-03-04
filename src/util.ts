@@ -11,3 +11,22 @@ export type Process = {
   targets: number[];
   phase: string;
 };
+
+export type Node = {
+  key: number;
+  connted: number[];
+  color: string;
+  isVisited: boolean;
+};
+export type Line = {
+  key: number;
+  existed: boolean;
+  color: string;
+};
+export type GProcess = {
+  visitedNode: number[];
+  visitedLine: number[];
+  targetNodes: number[];
+  targetNode: number;
+  phase: string;
+};
