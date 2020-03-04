@@ -15,7 +15,6 @@ export function makeRandomList(): GraphBar[] {
   return list;
 }
 export function rendering(list: GraphBar[], process: Process[], depth: number): GraphBar[] {
-  const SORT_HEIGHT = 0;
   // 소팅이 끝났으면 모든 그래프를 초록색으로 변환.
   if (process[depth].phase === 'done') {
     for (let i = 0; i < list.length; i += 1) {
@@ -39,18 +38,16 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
           }
         }
       } else if (process[depth].phase === 'compare') {
-        if (list[process[depth].arr[i]].index
-          === process[depth].targets[1]) {
-          list[process[depth].arr[i]].height = SORT_HEIGHT;
-          list[process[depth].arr[i]].color = '#ff9400';
-        } else if (list[process[depth].arr[i]].index
-          === process[depth].targets[0]) {
-          list[process[depth].arr[i]].color = '#ff9400';
+        for (let j = 0; j < process[depth].targets.length; j += 1) {
+          if (list[process[depth].arr[i]].index === process[depth].targets[j]) {
+            list[process[depth].arr[i]].height = 0;
+            list[process[depth].arr[i]].color = '#ff9400';
+          }
         }
       } else if (process[depth].phase === 'merge') {
         if (list[process[depth].arr[i]].index
           === process[depth].targets[1]) {
-          list[process[depth].arr[i]].height = SORT_HEIGHT;
+          list[process[depth].arr[i]].height = 0;
           list[process[depth].arr[i]].color = '#ff9400';
         } else if (list[process[depth].arr[i]].index
           === process[depth].targets[0]) {
