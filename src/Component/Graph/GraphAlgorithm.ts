@@ -6,9 +6,10 @@ export function bfs(nodeList: Node[]): GProcess[] {
   const visitedNode: number[] = [0];
   const visitedLine: string[] = [];
   let targetLine = '';
+  console.log(visitedNode);
   process.push({
-    visitedNode,
-    visitedLine,
+    visitedNode: visitedNode.slice(),
+    visitedLine: visitedLine.slice(),
     targetNodes: [],
     targetLine,
     phase: 'start',
@@ -35,8 +36,8 @@ export function bfs(nodeList: Node[]): GProcess[] {
         targetLine = here.toString().concat('to').concat(there.toString());
         visitedLine.push(targetLine);
         process.push({
-          visitedNode,
-          visitedLine,
+          visitedNode: visitedNode.slice(),
+          visitedLine: visitedLine.slice(),
           targetNodes: [here, there],
           targetLine,
           phase: 'visit',
