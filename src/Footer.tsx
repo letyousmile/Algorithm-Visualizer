@@ -52,7 +52,7 @@ function Footer(): JSX.Element {
         Algorithm Visualizer
       </Typography>
       <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-        SSAFY 서울특별시 강남구 역삼동 테헤란로 212
+        서울특별시 강남구 역삼동 테헤란로 212
       </Typography>
       <Copyright />
     </div>

@@ -12,7 +12,7 @@ function GraphNodes({ graphNodes, graphLines }: any): JSX.Element {
         width: '50px',
         backgroundColor: node.color,
         transform: `translate(${400 + 100 * Math.floor(node.key / 2)}px, ${200 + ((-1) ** Math.ceil(node.key / 2)) * 50 + ((-1) ** Math.ceil(node.key / 2)) * (Math.sqrt(40000 - ((100 * Math.floor(node.key / 2) - 200) ** 2)) / 1.5)}px)`,
-        zIndex: 1,
+        zIndex: 100,
       }}
       key={node.key}
     >
@@ -35,13 +35,14 @@ function GraphNodes({ graphNodes, graphLines }: any): JSX.Element {
       style={{
         stroke: line.color,
         strokeWidth: 2,
+        zIndex: 1,
       }}
     />
   ));
   return (
     <div>
       {nodes}
-      <svg height="1000" width="2000">
+      <svg height="1000" width="2000" style={{ zIndex: 1 }}>
         {lines}
       </svg>
     </div>

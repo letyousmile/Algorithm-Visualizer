@@ -62,7 +62,7 @@ function SortView(info: any): JSX.Element {
       if (depth < processLength && depth > -1) {
         // 현재 depth 저장.
         setDepth(depth);
-        setBar(rendering(graphBars, wholeSortProcess.slice(), depth));
+        setBar(rendering(graphBars, wholeSortProcess[depth]));
       }
     }
   }
