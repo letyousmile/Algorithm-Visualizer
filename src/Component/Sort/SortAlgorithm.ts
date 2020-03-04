@@ -101,13 +101,13 @@ export function quickSort(list: GraphBar[], keyList: number[],
       do {
         low += 1;
         process.push({
-          arr: keyList.slice(), targets: [pivot, low], phase: 'compare',
+          arr: keyList.slice(), targets: [pivot, low, high], phase: 'compare',
         });
       } while (low <= right && list[keyList[low]].value < pivotValue);
       do {
         high -= 1;
         process.push({
-          arr: keyList.slice(), targets: [pivot, high], phase: 'compare',
+          arr: keyList.slice(), targets: [pivot, low, high], phase: 'compare',
         });
       } while (high >= left && list[keyList[high]].value > pivotValue);
       if (low < high) {

@@ -20,3 +20,23 @@ export type GraphNode = {
   sorted: boolean;
   display: string;
 };
+
+export type Node = {
+  key: number;
+  connected: number[];
+  color: string;
+  isVisited: boolean;
+};
+export type Line = {
+  key: number;
+  from: number;
+  to: number;
+  color: string;
+};
+export type GProcess = {
+  visitedNode: number[];
+  visitedLine: string[];
+  targetNodes: number[];
+  targetLine: string;
+  phase: string;
+};

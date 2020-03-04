@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,9 +7,10 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
-import SortBars from './SortBars';
-import { GraphBar, Process } from '../../util';
-import { makeRandomList, sort, rendering } from './UtilFunction';
+
+import GraphNodes from './GraphNodes';
+import { Node, Line, GProcess } from '../../util';
+import { makeGraph, rendering, search } from './UtilFunction';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,24 +23,22 @@ let playing = false;
 let speed = 1000;
 
 // 소팅 알고리즘의 현재 진행 정도를 저장해 놓는 변수.
-let wholeSortProcess: Process[];
+let wholeSearchProcess: GProcess[];
 // 소팅 알고리즘 상태를 기억하는 배열의 길이 변수화.
 let processLength: number;
 let initialization = false;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function SortView(info: any): JSX.Element {
-  const pathName = info.location.pathname.substr(1);
+function GraphView(): JSX.Element {
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
-  // 리스트 초기 변수
-  const [graphBars, setBar] = useState<GraphBar[]>(makeRandomList());
+  const data = makeGraph();
+  const [graphNodes, setGraphNodes] = useState<Node[]>(data[0]);
+  const [graphLines, setGraphLines] = useState<Map<string, Line>>(data[1]);
 
-  if (graphBars !== undefined) {
+  if (graphNodes !== undefined) {
     if (initialization) {
-      console.log('정렬다시함');
-      wholeSortProcess = sort(graphBars, pathName);
-      processLength = wholeSortProcess.length;
+      wholeSearchProcess = search(graphNodes, 'bfs');
+      processLength = wholeSearchProcess.length;
     }
   }
 
@@ -57,21 +55,24 @@ function SortView(info: any): JSX.Element {
     initialization = false;
     // stop이 눌러졌는지 확인.
     if (playing) {
-      console.log(processLength);
       // 상태기억 배열의 길이를 벗어하는 depth가 들어왔는지 확인.
       if (depth < processLength && depth > -1) {
         // 현재 depth 저장.
         setDepth(depth);
-        setBar(rendering(graphBars, wholeSortProcess[depth]));
+        console.log(wholeSearchProcess[depth]);
+        const temp = rendering(graphNodes, graphLines, wholeSearchProcess[depth]);
+        setGraphNodes(temp[0]);
+        setGraphLines((temp[1]));
+        console.log(graphNodes);
       }
     }
   }
 
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
-  function makeRandomNumber(howSorted = 'random'): void {
-    const temp: GraphBar[] = makeRandomList(howSorted);
-    console.log(temp);
-    setBar(temp);
+  function makeRandomNumber(density = 'normal'): void {
+    const temp = makeGraph(density);
+    setGraphNodes(temp[0]);
+    setGraphLines(temp[1]);
     setDepth(0);
     initialization = true;
   }
@@ -86,8 +87,8 @@ function SortView(info: any): JSX.Element {
   // 멈춤 flag를 해제하는 함수.(진행하는 함수 아니고 멈춤을 해제하는거임)
   function play(): void {
     if (processLength === undefined) {
-      wholeSortProcess = sort(graphBars, pathName);
-      processLength = wholeSortProcess.length;
+      wholeSearchProcess = search(graphNodes, 'bfs');
+      processLength = wholeSearchProcess.length;
     }
     playing = true;
     setNowPlaying(playing);
@@ -113,11 +114,11 @@ function SortView(info: any): JSX.Element {
   if (!playing) {
     initialization = true;
   }
-
   return (
-    <div style={{
-      height: '700px',
-    }}
+    <div
+      style={{
+        height: '700px',
+      }}
     >
       <div style={{
         display: 'flex',
@@ -158,10 +159,9 @@ function SortView(info: any): JSX.Element {
         justifyContent: 'center',
       }}
       >
-        <SortBars graphBars={graphBars} />
+        <GraphNodes graphNodes={graphNodes} graphLines={Array.from(graphLines.values())} />
       </div>
     </div>
   );
 }
-
-export default SortView;
+export default GraphView;

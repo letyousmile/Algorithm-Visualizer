@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Main from '../Main';
 import SortView from '../Component/Sort/SortView';
 import HSort from '../Component/Sort/HeapSort';
+import GraphView from '../Component/Graph/GraphView';
 
 function Routes(): JSX.Element {
   return (
@@ -15,6 +16,7 @@ function Routes(): JSX.Element {
         <Route path="/MSort" component={SortView} />
         <Route path="/QSort" component={SortView} />
         <Route path="/HSort" component={HSort} />
+        <Route path="/Graph" component={GraphView} />
       </Switch>
     </Router>
   );
