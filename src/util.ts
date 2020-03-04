@@ -14,21 +14,20 @@ export type Process = {
 
 export type Node = {
   key: number;
-  connted: number[];
+  connected: number[];
   color: string;
   isVisited: boolean;
 };
 export type Line = {
   key: number;
-  existed: boolean;
-  color: string;
   from: number;
   to: number;
+  color: string;
 };
 export type GProcess = {
   visitedNode: number[];
-  visitedLine: number[];
+  visitedLine: string[];
   targetNodes: number[];
-  targetLine: number;
+  targetLine: string;
   phase: string;
 };
