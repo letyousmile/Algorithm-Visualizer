@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InsertionSortGraphBar } from '../../../util';
-// import { bar } from './util';
+import { GraphBar } from '../../util';
 
-
-function InsertionSortBar({ graphBars }: any): JSX.Element {
-  const inserttionSortBars = graphBars.map((graphBar: InsertionSortGraphBar) => (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function SortBar({ graphBars }: any): JSX.Element {
+  const SortBars = graphBars.map((graphBar: GraphBar) => (
     <div
       style={{
+        bottom: '300px',
         position: 'absolute',
         width: '50px',
         height: `${(graphBar.value * 20) + 50}px`,
@@ -15,7 +15,7 @@ function InsertionSortBar({ graphBars }: any): JSX.Element {
         textAlign: 'center',
         color: 'black',
         border: '1px solid black',
-        transform: `translate(${graphBar.index * 50 - graphBars.length * 25}px, ${(window.innerHeight / 2) * 1.3 + graphBar.height}px)`,
+        transform: `translate(${graphBar.index * 50 - graphBars.length * 25}px, ${(window.innerHeight / 5) * 1.3 + graphBar.height}px)`,
         WebkitTransition: ' -webkit-transform 0.2s',
         transition: 'transform 0.2s',
       }}
@@ -38,12 +38,12 @@ function InsertionSortBar({ graphBars }: any): JSX.Element {
   };
   return (
     <div style={flex}>
-      {inserttionSortBars}
+      {SortBars}
     </div>
   );
 }
 
-InsertionSortBar.propTypes = {
+SortBar.propTypes = {
   graphBars: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
-export default InsertionSortBar;
+export default SortBar;
