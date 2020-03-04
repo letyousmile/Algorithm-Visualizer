@@ -44,7 +44,13 @@ export function bfs(nodeList: Node[]): GProcess[] {
       }
     }
   }
-
+  process.push({
+    visitedNode,
+    visitedLine,
+    targetNodes: [],
+    targetLine: '',
+    phase: 'done',
+  });
   return process;
 }
 
