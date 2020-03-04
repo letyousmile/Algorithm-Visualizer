@@ -32,6 +32,7 @@ let initialization = false;
 function SortView(info: any): JSX.Element {
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
+  const [toggle, setToggle] = useState(false);
   // 리스트 초기 변수
   const [graphBars, setBar] = useState<GraphBar[]>(makeRandomList());
 
@@ -67,8 +68,8 @@ function SortView(info: any): JSX.Element {
   }
 
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
-  function makeRandomNumber(): void {
-    const temp: GraphBar[] = makeRandomList();
+  function makeRandomNumber(howSorted = 'random'): void {
+    const temp: GraphBar[] = makeRandomList(howSorted);
     console.log(temp);
     setBar(temp);
     setDepth(0);
@@ -78,8 +79,8 @@ function SortView(info: any): JSX.Element {
   // 멈추는 함수.
   function stop(): void {
     playing = false;
-    initialization = false;
     setNowPlaying(playing);
+    initialization = false;
   }
 
   // 멈춤 flag를 해제하는 함수.(진행하는 함수 아니고 멈춤을 해제하는거임)
@@ -90,7 +91,6 @@ function SortView(info: any): JSX.Element {
     }
     playing = true;
     setNowPlaying(playing);
-    initialization = false;
   }
   // 재귀를 이용해 goTo()함수를 연속적으로 호출하는 함수.
   const flow = (depth: number): void => {
@@ -109,6 +109,11 @@ function SortView(info: any): JSX.Element {
       }
     }
   };
+  // 다른 화면으로 넘어갈 때는 초기화
+  if (!playing) {
+    initialization = true;
+  }
+
   return (
     <div style={{
       height: '700px',
@@ -121,20 +126,30 @@ function SortView(info: any): JSX.Element {
       }}
       >
         {/* 이동에 관한 함수는 stop상태에서만 조작할 수 있음 == (if (!playing)) */}
-        <Button className={classes.button} size="medium" onClick={(): void => { if (!playing) { play(); goTo(0); stop(); } }}>시작으로 가기</Button>
+        <Button className={classes.button} size="medium" onClick={(): void => { if (!playing) { play(); goTo(0); stop(); initialization = true; } }}>시작으로 가기</Button>
         <IconButton aria-label="skipPrevious" onClick={(): void => { if (!playing) { play(); goTo(nowDepth - 1); stop(); } }}>
           <SkipPreviousIcon />
         </IconButton>
-        <IconButton aria-label="playAndPause" onClick={(): void => { if (!playing) { play(); flow(nowDepth); initialization = false; } else { stop(); } }}>
-          {!nowPlaying
+        <IconButton aria-label="playAndPause" onClick={(): void => { if (!playing) { play(); flow(nowDepth); initialization = true; } else { stop(); initialization = true; } }}>
+          {(!nowPlaying || initialization)
             && <PlayArrowIcon />}
-          {nowPlaying
+          {(nowPlaying && !initialization)
             && <PauseIcon />}
         </IconButton>
         <IconButton aria-label="skipNext" onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>
           <SkipNextIcon />
         </IconButton>
-        <Button className={classes.button} size="medium" onClick={(): void => { makeRandomNumber(); stop(); initialization = true; }}>초기화 하기</Button>
+        {!toggle && <Button className={classes.button} size="medium" onClick={(): void => { if (!toggle) { setToggle(true); } else { setToggle(false); } }}>배열생성</Button>}
+        {toggle
+          && (
+            <div>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(); stop(); }}>난수배열</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('increasing'); stop(); }}>증가배열</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('decreasing'); stop(); }}>감소배열</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('nearlyIncreasing'); stop(); }}>상승세배열</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('nearlyDecreasing'); stop(); }}>하강세배열</Button>
+            </div>
+          )}
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed > 100) { speed -= 100; } }}>빠르게</Button>
       </div>

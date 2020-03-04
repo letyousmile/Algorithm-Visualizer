@@ -147,10 +147,8 @@ export function mergeSort(list: GraphBar[], keyList: number[]): Process[] {
     let i = left;
     let j = mid + 1;
     let k = left;
+    const temp = keyList.slice();
     while (i <= mid && j <= right) {
-      process.push({
-        arr: keyList.slice(), targets: [i, j], phase: 'merge-compare',
-      });
       if (list[listt[i]].value <= list[listt[j]].value) {
         sorted[k] = listt[i];
         k += 1;
@@ -160,31 +158,33 @@ export function mergeSort(list: GraphBar[], keyList: number[]): Process[] {
         k += 1;
         j += 1;
       }
-      process.push({
-        arr: sorted.slice(), targets: [k, k], phase: 'down',
-      });
     }
     if (i > mid) {
       for (let l = j; l <= right; l += 1) {
         sorted[k] = listt[l];
-        process.push({
-          arr: sorted.slice(), targets: [k, k], phase: 'down',
-        });
         k += 1;
       }
     } else {
       for (let l = i; l <= mid; l += 1) {
         sorted[k] = listt[l];
-        process.push({
-          arr: sorted.slice(), targets: [k, k], phase: 'down',
-        });
         k += 1;
       }
+    }
+    for (let m = left; m <= right; m += 1) {
+      let temp2 = -1;
+      for (let n = left; n <= right; n += 1) {
+        if (temp[n] === sorted[m]) {
+          temp2 = n;
+        }
+      }
+      process.push({
+        arr: temp.slice(), targets: [m, temp2], phase: 'merge-down',
+      });
     }
     keyList = sorted.slice();
 
     process.push({
-      arr: keyList.slice(), targets: [left, right], phase: 'up',
+      arr: keyList.slice(), targets: [left, right], phase: 'merge-up',
     });
   };
 

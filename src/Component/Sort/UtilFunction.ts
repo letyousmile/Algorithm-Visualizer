@@ -4,16 +4,120 @@ import {
   bubbleSort, selectionSort, insertionSort, quickSort, mergeSort,
 } from './SortAlgorithm';
 
-export function makeRandomList(): GraphBar[] {
-  const list: GraphBar[] = [];
-  for (let j = 0; j < 10; j += 1) {
-    const tempBar = {
-      key: j, value: Math.floor(Math.random() * 21), color: '#f54141', index: j, sorted: false, height: 0,
-    };
-    list.push(tempBar);
+export function makeRandomList(howSorted = 'random'): GraphBar[] {
+  let list: GraphBar[] = [];
+  function random(): GraphBar[] {
+    const tempList: GraphBar[] = [];
+    for (let j = 0; j < 10; j += 1) {
+      const tempBar = {
+        key: j, value: Math.floor(Math.random() * 21), color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function increasing(): GraphBar[] {
+    let k = 0;
+    const tempList: GraphBar[] = [];
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (6 - k)) + k;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (11 - k)) + k;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (16 - k)) + k;
+      } else {
+        k = Math.floor(Math.random() * (21 - k)) + k;
+      }
+      const tempBar = {
+        key: j, value: k, color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function nearlyIncreasing(): GraphBar[] {
+    let k = 0;
+    const tempList: GraphBar[] = [];
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (3 - k)) + k;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (8 - k)) + k;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (13 - k)) + k;
+      } else {
+        k = Math.floor(Math.random() * (18 - k)) + k;
+      }
+      const tempBar = {
+        key: j, value: k + Math.floor(Math.random() * 4), color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function decreasing(): GraphBar[] {
+    const tempList: GraphBar[] = [];
+    let k = 21;
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (k - 16)) + 16;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (k - 11)) + 11;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (k - 6)) + 6;
+      } else {
+        k = Math.floor(Math.random() * (k)) + 0;
+      }
+      const tempBar = {
+        key: j, value: k, color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  function nearlyDecreasing(): GraphBar[] {
+    const tempList: GraphBar[] = [];
+    let k = 18;
+    for (let j = 0; j < 10; j += 1) {
+      if (j <= 2) {
+        k = Math.floor(Math.random() * (k - 15)) + 15;
+      } else if (j <= 5) {
+        k = Math.floor(Math.random() * (k - 10)) + 10;
+      } else if (j <= 8) {
+        k = Math.floor(Math.random() * (k - 5)) + 5;
+      } else {
+        k = Math.floor(Math.random() * (k)) + 0;
+      }
+      const tempBar = {
+        key: j, value: k + Math.floor(Math.random() * 4), color: '#f54141', index: j, sorted: false, height: 0,
+      };
+      tempList.push(tempBar);
+    }
+    return tempList;
+  }
+  switch (howSorted) {
+    case 'random':
+      list = random();
+      break;
+    case 'increasing':
+      list = increasing();
+      break;
+    case 'decreasing':
+      list = decreasing();
+      break;
+    case 'nearlyIncreasing':
+      list = nearlyIncreasing();
+      break;
+    case 'nearlyDecreasing':
+      list = nearlyDecreasing();
+      break;
+    default:
+      break;
   }
   return list;
 }
+
 export function rendering(list: GraphBar[], process: Process[], depth: number): GraphBar[] {
   const SORT_HEIGHT = 0;
   // 소팅이 끝났으면 모든 그래프를 초록색으로 변환.
@@ -23,10 +127,12 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
     }
   } else {
     for (let i = 0; i < list.length; i += 1) {
-      // 먼저 막대 빨간색으로 초기화
-      list[process[depth].arr[i]].color = '#f54141';
-      // 그래프의 위치 인덱스 변경.
-      list[process[depth].arr[i]].index = i;
+      if (process[depth].phase !== 'merge-down') {
+        // 그래프의 위치 인덱스 변경.
+        list[process[depth].arr[i]].index = i;
+        // 먼저 막대 빨간색으로 초기화
+        list[process[depth].arr[i]].color = '#f54141';
+      }
       // 소팅 알고리즘 진행 상황에따라 그래프의 색과 높이 변경.
       if (process[depth].phase === 'change') {
         if (list[process[depth].arr[i]].index
@@ -47,10 +153,9 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
           === process[depth].targets[0]) {
           list[process[depth].arr[i]].color = '#ff9400';
         }
-      } else if (process[depth].phase === 'merge') {
+      } else if (process[depth].phase === 'merge-compare') {
         if (list[process[depth].arr[i]].index
           === process[depth].targets[1]) {
-          list[process[depth].arr[i]].height = SORT_HEIGHT;
           list[process[depth].arr[i]].color = '#ff9400';
         } else if (list[process[depth].arr[i]].index
           === process[depth].targets[0]) {
@@ -70,18 +175,20 @@ export function rendering(list: GraphBar[], process: Process[], depth: number): 
           === process[depth].targets[1]) {
           list[process[depth].arr[i]].height = 0;
         }
-      } else if (process[depth].phase === 'up') {
+      } else if (process[depth].phase === 'merge-up') {
         for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
           if (list[process[depth].arr[i]].index === j) {
             list[process[depth].arr[i]].height = 0;
             list[process[depth].arr[i]].color = '#2ee22e';
           }
         }
-      } else if (process[depth].phase === 'down') {
-        for (let j = process[depth].targets[0]; j <= process[depth].targets[1]; j += 1) {
-          if (list[process[depth].arr[i]].index === j) {
-            list[process[depth].arr[i]].height = 50;
-          }
+      } else if (process[depth].phase === 'merge-down') {
+        if (list[process[depth].arr[i]].index === process[depth].targets[1]
+          && list[process[depth].arr[i]].height === 0) {
+          const changeTo = process[depth].targets[0];
+          list[process[depth].arr[i]].index = changeTo;
+          list[process[depth].arr[i]].height = 50;
+          list[process[depth].arr[i]].color = '#ff9400';
         }
       } else if (process[depth].phase === 'start') {
         for (let j = 0; j < list.length; j += 1) {
