@@ -6,19 +6,27 @@ export type GraphBar = {
   sorted: boolean;
   height: number;
 };
+export type Process = {
+  arr: number[];
+  targets: number[];
+  phase: string;
+};
+
 export type Node = {
   key: number;
   connted: number[];
   color: string;
   isVisited: boolean;
 };
-export type Process = {
-  arr: number[];
-  targets: number[];
-  phase: string;
+export type Line = {
+  key: number;
+  existed: boolean;
+  color: string;
 };
 export type GProcess = {
-  visited: boolean[];
-  targets: number[];
+  visitedNode: number[];
+  visitedLine: number[];
+  targetNodes: number[];
+  targetNode: number;
   phase: string;
 };
