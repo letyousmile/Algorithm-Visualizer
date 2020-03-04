@@ -130,7 +130,7 @@ function SortView(info: any): JSX.Element {
         <IconButton aria-label="skipPrevious" onClick={(): void => { if (!playing) { play(); goTo(nowDepth - 1); stop(); } }}>
           <SkipPreviousIcon />
         </IconButton>
-        <IconButton aria-label="playAndPause" onClick={(): void => {if (!playing) { play(); flow(nowDepth); initialization = true; } else { stop(); initialization = true; } }}>
+        <IconButton aria-label="playAndPause" onClick={(): void => { if (!playing) { play(); flow(nowDepth); initialization = true; } else { stop(); initialization = true; } }}>
           {(!nowPlaying || initialization)
             && <PlayArrowIcon />}
           {(nowPlaying && !initialization)
