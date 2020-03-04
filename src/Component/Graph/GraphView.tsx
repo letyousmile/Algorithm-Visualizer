@@ -31,7 +31,7 @@ let initialization = false;
 function GraphView(): JSX.Element {
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
-  const data = makeGraph();
+  const data = makeGraph('low');
   const [graphNodes, setGraphNodes] = useState<Node[]>(data[0]);
   const [graphLines, setGraphLines] = useState<Map<string, Line>>(data[1]);
 
@@ -69,7 +69,7 @@ function GraphView(): JSX.Element {
   }
 
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
-  function makeRandomNumber(density = 'normal'): void {
+  function makeRandomNumber(density = 'low'): void {
     const temp = makeGraph(density);
     setGraphNodes(temp[0]);
     setGraphLines(temp[1]);

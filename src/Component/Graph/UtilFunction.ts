@@ -20,7 +20,7 @@ export function makeGraph(density = 'normal'): [ Node[], Map<string, Line>] {
     }
     const randomList: number[] = Array.from(randomSet).sort();
     const node: Node = {
-      key: i, connected: randomList, color: '#grey', isVisited: false,
+      key: i, connected: randomList, color: 'grey', isVisited: false,
     };
     nodeList.push(node);
     for (let j = 0; j < randomList.length; j += 1) {
