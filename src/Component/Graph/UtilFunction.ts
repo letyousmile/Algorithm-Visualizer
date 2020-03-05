@@ -5,29 +5,35 @@ export function makeGraph(density = 'normal'): [ Node[], Map<string, Line>] {
   const len = 10;
   let lineKey = 0;
   const nodeList: Node[] = [];
-  const lineMap = new Map<string, Line>();
-  let d = len / 2;
-  if (density === 'low') {
-    d = len / 5;
-  } else {
-    d = len;
-  }
   for (let i = 0; i < len; i += 1) {
-    const randomSet = new Set<number>();
-    for (let j = 0; j < d; j += 1) {
-      if (i === len - 1) break;
-      randomSet.add(Math.floor(Math.random() * (len - i - 1) + i + 1));
-    }
-    const randomList: number[] = Array.from(randomSet).sort();
     const node: Node = {
-      key: i, connected: randomList, color: 'grey', isVisited: false,
+      key: i, connected: [], color: 'grey',
     };
     nodeList.push(node);
-    for (let j = 0; j < randomList.length; j += 1) {
+  }
+  const lineMap = new Map<string, Line>();
+  let d = len / 3;
+  if (density === 'low') {
+    d = len / 5;
+  } else if (density === 'high') {
+    d = len / 2;
+  }
+  for (let i = 0; i < len - 1; i += 1) {
+    if (nodeList[i].connected.length >= d) break;
+    const randomSet = new Set<number>();
+    for (let j = 0; j < d - nodeList[i].connected.length; j += 1) {
+      randomSet.add(Math.floor(Math.random() * (len - i - 1) + i + 1));
+    }
+    const tempList = Array.from(randomSet).sort();
+    for (let j = 0; j < tempList.length; j += 1) {
+      nodeList[i].connected.push(tempList[j]);
+      nodeList[tempList[j]].connected.push(i);
+    }
+    for (let j = 0; j < tempList.length; j += 1) {
       const line: Line = {
-        key: lineKey, from: i, to: randomList[j], color: 'black',
+        key: lineKey, from: i, to: tempList[j], color: 'black',
       };
-      lineMap.set(i.toString().concat('to').concat(randomList[j].toString()), line);
+      lineMap.set(i.toString().concat('to').concat(tempList[j].toString()), line);
       lineKey += 1;
     }
   }
