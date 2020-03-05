@@ -1,7 +1,7 @@
 import { Node, Line, GProcess } from '../../util';
 import { bfs, dfs } from './GraphAlgorithm';
 
-export function makeGraph(density = 'normal'): [ Node[], Map<string, Line>] {
+export function makeGraph(density = 'normal'): [Node[], Map<string, Line>] {
   const len = 10;
   let lineKey = 0;
   const nodeList: Node[] = [];
@@ -54,12 +54,15 @@ export const search = (nodeList: Node[], searchName: string): GProcess[] => {
   return process;
 };
 export function rendering(nodeList: Node[], lineMap: Map<string, Line>, process: GProcess):
-[Node[], Map<string, Line>] {
+  [Node[], Map<string, Line>] {
   const NList = nodeList.slice();
   const LMap = lineMap;
   const NVisited = process.visitedNode;
   const LVisited = process.visitedLine;
   const NTargets = process.targetNodes;
+  for (let i = 0; i < NList.length; i += 1) {
+    NList[i].color = 'grey';
+  }
   // 이미 방문된 것들 색 바꿔주기
   for (let i = 0; i < NVisited.length; i += 1) {
     NList[NVisited[i]].color = '#2ee22e';
@@ -72,12 +75,12 @@ export function rendering(nodeList: Node[], lineMap: Map<string, Line>, process:
     }
   }
   // 지금 방문한 거 색 바꾸기
-  if (NTargets.length > 0) {
-    console.log(NTargets);
-    NList[NTargets[0]].color = 'orange';
-    NList[NTargets[1]].color = 'yellow';
+  if (process.phase === 'visit') {
+    if (NTargets.length > 0) {
+      NList[NTargets[0]].color = 'orange';
+      NList[NTargets[1]].color = 'yellow';
+    }
   }
-
   const line = LMap.get(process.targetLine);
   if (line !== undefined) {
     line.color = '#ff9400';
