@@ -91,6 +91,14 @@ export function dfs(nodeList: Node[]): GProcess[] {
   }
   while (stack.length > 0) {
     nowFromTo = stack.pop();
+    process.push({
+      visitedNode: visitedNode.slice(),
+      visitedLine: visitedLine.slice(),
+      targetNodes: [],
+      targetLine,
+      phase: 'pop',
+      list: stack.map((el) => el[1]),
+    });
     if (nowFromTo !== undefined) {
       const nowFrom = nowFromTo[0];
       const nowTo = nowFromTo[1];
@@ -107,19 +115,28 @@ export function dfs(nodeList: Node[]): GProcess[] {
       });
       const hereNode = nodeList[nowTo];
       for (let j = 0; j < hereNode.connected.length; j += 1) {
-        if (!visitedNode.includes(hereNode.connected[j])) {
+        if (!visitedNode.includes(hereNode.connected[j])
+          && !stack.map((el) => el[1]).includes(hereNode.connected[j])) {
           stack.push([nowTo, hereNode.connected[j]]);
+          process.push({
+            visitedNode: visitedNode.slice(),
+            visitedLine: visitedLine.slice(),
+            targetNodes: [nowFrom, nowTo],
+            targetLine,
+            phase: 'push',
+            list: stack.map((el) => el[1]),
+          });
         }
       }
     }
-    process.push({
-      visitedNode: visitedNode.slice(),
-      visitedLine: visitedLine.slice(),
-      targetNodes: [],
-      targetLine,
-      phase: 'done',
-      list: stack.map((el) => el[1]),
-    });
   }
+  process.push({
+    visitedNode: visitedNode.slice(),
+    visitedLine: visitedLine.slice(),
+    targetNodes: [],
+    targetLine,
+    phase: 'done',
+    list: stack.map((el) => el[1]),
+  });
   return process;
 }
