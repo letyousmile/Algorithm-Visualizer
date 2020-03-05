@@ -2,7 +2,7 @@ import React from 'react';
 import { Node, Line } from '../../util';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function GraphNodes({ graphNodes, graphLines }: any): JSX.Element {
+function GraphNodes({ graphNodes, graphLines, list }: any): JSX.Element {
   const nodes = graphNodes.map((node: Node) => (
     <div
       style={{
@@ -41,10 +41,42 @@ function GraphNodes({ graphNodes, graphLines }: any): JSX.Element {
       key={line.key}
     />
   ));
+  const stackOrQueue = list.map((node: number) => (
+    <div
+      style={{
+        width: '50px',
+        height: '50px',
+        borderRadius: '10px',
+        fontSize: '40px',
+        color: 'black',
+        border: '2px solid black',
+        borderStyle: 'dashed',
+        textAlign: 'center',
+        lineHeight: '40px',
+        marginBottom: '5px',
+        WebkitTransition: ' -webkit-transform 0.2s opacity 0.2s',
+        transition: 'transform 0.2s opacity 0.2s',
+      }}
+      key={node}
+    >
+      {node}
+    </div>
+  ));
   return (
     <div>
       {nodes}
-      <svg height="1000" width="2000" style={{ zIndex: 1 }}>
+      <div style={{
+        display: 'flex',
+        height: '400px',
+        position: 'absolute',
+        transform: 'translate(1000px, 100px)',
+        flexDirection: 'column-reverse',
+        justifyContent: 'flex-start',
+      }}
+      >
+        {stackOrQueue}
+      </div>
+      <svg height="1000" width="2000">
         {lines}
       </svg>
     </div>

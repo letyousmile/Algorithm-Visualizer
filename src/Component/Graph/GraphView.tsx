@@ -35,6 +35,7 @@ function GraphView(info: any): JSX.Element {
   const data = makeGraph('normal');
   const [graphNodes, setGraphNodes] = useState<Node[]>(data[0]);
   const [graphLines, setGraphLines] = useState<Map<string, Line>>(data[1]);
+  const [list, setList] = useState<number[]>([]);
 
   if (graphNodes !== undefined) {
     if (initialization) {
@@ -64,6 +65,7 @@ function GraphView(info: any): JSX.Element {
         const temp = rendering(graphNodes, graphLines, wholeSearchProcess[depth]);
         setGraphNodes(temp[0]);
         setGraphLines((temp[1]));
+        setList(wholeSearchProcess[depth].list);
       }
     }
   }
@@ -157,7 +159,11 @@ function GraphView(info: any): JSX.Element {
         justifyContent: 'center',
       }}
       >
-        <GraphNodes graphNodes={graphNodes} graphLines={Array.from(graphLines.values())} />
+        <GraphNodes
+          graphNodes={graphNodes}
+          graphLines={Array.from(graphLines.values())}
+          list={list}
+        />
       </div>
     </div>
   );

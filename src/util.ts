@@ -31,4 +31,5 @@ export type GProcess = {
   targetNodes: number[];
   targetLine: string;
   phase: string;
+  list: number[];
 };
