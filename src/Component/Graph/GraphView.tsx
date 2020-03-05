@@ -159,7 +159,11 @@ function GraphView(info: any): JSX.Element {
         justifyContent: 'center',
       }}
       >
-        <GraphNodes graphNodes={graphNodes} graphLines={Array.from(graphLines.values())} list={list} />
+        <GraphNodes
+          graphNodes={graphNodes}
+          graphLines={Array.from(graphLines.values())}
+          list={list}
+        />
       </div>
     </div>
   );

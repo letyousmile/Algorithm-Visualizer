@@ -5,23 +5,22 @@ export function bfs(nodeList: Node[]): GProcess[] {
   const process: GProcess[] = [];
   const visitedNode: number[] = [0];
   const visitedLine: string[] = [];
+  const q: number[] = new Array<number>(10);
   let targetLine = '';
+  const start = 0;
+  let front = -1;
+  let rear = -1;
+  rear += 1;
+  q[rear] = start;
+  visited[0] = true;
   process.push({
     visitedNode: visitedNode.slice(),
     visitedLine: visitedLine.slice(),
     targetNodes: [],
     targetLine,
     phase: 'start',
-    list: [],
+    list: q.slice(),
   });
-  const start = 0;
-  let front = -1;
-  let rear = -1;
-
-  const q: number[] = new Array<number>(10);
-  rear += 1;
-  q[rear] = start;
-  visited[0] = true;
   while (front !== rear) {
     front += 1;
     const here = q[front];
@@ -43,7 +42,7 @@ export function bfs(nodeList: Node[]): GProcess[] {
           targetNodes: [here, there],
           targetLine,
           phase: 'visit',
-          list: [],
+          list: q.slice(),
         });
       }
     }
@@ -54,7 +53,7 @@ export function bfs(nodeList: Node[]): GProcess[] {
     targetNodes: [],
     targetLine: '',
     phase: 'done',
-    list: [],
+    list: q.slice(),
   });
   return process;
 }
@@ -64,28 +63,20 @@ export function dfs(nodeList: Node[]): GProcess[] {
   const visitedNode: number[] = [0];
   const visitedLine: string[] = [];
   let targetLine = '';
+  const stack: number[][] = [];
+  stack.push([0, 0]);
   process.push({
     visitedNode: visitedNode.slice(),
     visitedLine: visitedLine.slice(),
     targetNodes: [],
     targetLine,
     phase: 'start',
-    list: [],
+    list: stack.map((el) => el[1]),
   });
-  const stack: number[][] = [];
-  stack.push([0, 0]);
   let nowFromTo = stack.pop();
   if (nowFromTo !== undefined) {
     const now = nowFromTo[0];
     visitedNode.push(now);
-    process.push({
-      visitedNode: visitedNode.slice(),
-      visitedLine: visitedLine.slice(),
-      targetNodes: [],
-      targetLine,
-      phase: 'visit',
-      list: [0],
-    });
     for (let i = 0; i < nodeList[now].connected.length; i += 1) {
       stack.push([now, nodeList[now].connected[i]]);
       process.push({
