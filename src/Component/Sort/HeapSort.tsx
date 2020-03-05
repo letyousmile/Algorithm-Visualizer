@@ -39,19 +39,7 @@ function HSort(): JSX.Element {
 
   // heapSort();
 
-<<<<<<< HEAD
   function rendering(list: GraphBar[], process: Process[], depth: number): GraphBar[] {
-=======
-    return process;
-  }
-
-  function rendering(list: GraphNode[], process: Process[], depth: number): GraphNode[] {
-    // const tList = [...list];
-    // console.log('tList', list);
-    // console.log('process', process);
-    // 소팅이 끝났으면 모든 그래프를 초록색으로 변환.
-    console.log(process[depth]);
->>>>>>> 5d178709c319fe8214d41b67d47491685a771ad3
     for (let i = 0; i < list.length; i += 1) {
       list[i].display = 'hidden';
       list[i].color = '#f54141';
