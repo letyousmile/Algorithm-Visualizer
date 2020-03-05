@@ -16,7 +16,8 @@ function Routes(): JSX.Element {
         <Route path="/MSort" component={SortView} />
         <Route path="/QSort" component={SortView} />
         <Route path="/HSort" component={HSort} />
-        <Route path="/Graph" component={GraphView} />
+        <Route path="/bfs" component={GraphView} />
+        <Route path="/dfs" component={GraphView} />
       </Switch>
     </Router>
   );

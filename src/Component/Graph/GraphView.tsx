@@ -28,7 +28,8 @@ let wholeSearchProcess: GProcess[];
 let processLength: number;
 let initialization = false;
 
-function GraphView(): JSX.Element {
+function GraphView(info: any): JSX.Element {
+  const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
   const data = makeGraph('low');
@@ -37,7 +38,8 @@ function GraphView(): JSX.Element {
 
   if (graphNodes !== undefined) {
     if (initialization) {
-      wholeSearchProcess = search(graphNodes, 'bfs');
+      wholeSearchProcess = search(graphNodes, pathName);
+      console.log(wholeSearchProcess);
       processLength = wholeSearchProcess.length;
     }
   }
