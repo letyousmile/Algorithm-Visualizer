@@ -38,6 +38,7 @@ function GraphNodes({ graphNodes, graphLines }: any): JSX.Element {
         strokeWidth: 2,
         zIndex: 1,
       }}
+      key={line.key}
     />
   ));
   return (
