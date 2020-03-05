@@ -18,7 +18,6 @@ export type Node = {
   key: number;
   connected: number[];
   color: string;
-  isVisited: boolean;
 };
 export type Line = {
   key: number;

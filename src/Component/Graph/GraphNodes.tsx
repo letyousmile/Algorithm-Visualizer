@@ -1,6 +1,7 @@
 import React from 'react';
 import { Node, Line } from '../../util';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function GraphNodes({ graphNodes, graphLines }: any): JSX.Element {
   const nodes = graphNodes.map((node: Node) => (
     <div
@@ -37,6 +38,7 @@ function GraphNodes({ graphNodes, graphLines }: any): JSX.Element {
         strokeWidth: 2,
         zIndex: 1,
       }}
+      key={line.key}
     />
   ));
   return (
