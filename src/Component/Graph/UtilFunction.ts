@@ -60,6 +60,17 @@ export function rendering(nodeList: Node[], lineMap: Map<string, Line>, process:
   const NVisited = process.visitedNode;
   const LVisited = process.visitedLine;
   const NTargets = process.targetNodes;
+  // 단계를 위한 초기화
+  for (let i = 0; i < NList.length; i += 1) {
+    NList[i].color = 'grey';
+  }
+  LMap.forEach((value, key) => {
+    const line = LMap.get(key);
+    if (line !== undefined) {
+      line.color = 'black';
+      LMap.set(key, line);
+    }
+  });
   // 이미 방문된 것들 색 바꿔주기
   for (let i = 0; i < NVisited.length; i += 1) {
     NList[NVisited[i]].color = '#2ee22e';
