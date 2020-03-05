@@ -125,7 +125,6 @@ function HSort(): JSX.Element {
 
   function rendering(list: GraphNode[], process: Process[], depth: number): GraphNode[] {
     // const tList = [...list];
-    const SORT_HEIGHT = 0;
     // console.log('tList', list);
     // console.log('process', process);
     // 소팅이 끝났으면 모든 그래프를 초록색으로 변환.

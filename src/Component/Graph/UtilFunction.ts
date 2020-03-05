@@ -66,9 +66,12 @@ export function rendering(nodeList: Node[], lineMap: Map<string, Line>, process:
     }
   }
   // 지금 방문한 거 색 바꾸기
-  for (let i = 0; i < NTargets.length; i += 1) {
-    NList[NTargets[i]].color = 'ff9400';
+  if (NTargets.length > 0) {
+    console.log(NTargets);
+    NList[NTargets[0]].color = 'orange';
+    NList[NTargets[1]].color = 'yellow';
   }
+
   const line = LMap.get(process.targetLine);
   if (line !== undefined) {
     line.color = '#ff9400';
