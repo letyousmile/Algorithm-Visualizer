@@ -105,13 +105,13 @@ export function dfs(nodeList: Node[]): GProcess[] {
         }
       }
     }
-    process.push({
-      visitedNode: visitedNode.slice(),
-      visitedLine: visitedLine.slice(),
-      targetNodes: [],
-      targetLine,
-      phase: 'done',
-    });
   }
+  process.push({
+    visitedNode: visitedNode.slice(),
+    visitedLine: visitedLine.slice(),
+    targetNodes: [],
+    targetLine,
+    phase: 'done',
+  });
   return process;
 }
