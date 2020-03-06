@@ -52,7 +52,7 @@ export function makeFixedGraph(type: number): [FixedNode[], Map<string, Weighted
     [[0, 0], [400, 0], [170, 150], [230, 250], [0, 400], [400, 400]],
   ];
   const connetion: number[][][] = [
-    [[1, 2, 4], [0, 3, 5], [0, 4, 3], [2, 4, 5], [0, 2, 3, 5], [1, 3, 4]],
+    [[1, 2, 4], [0, 3, 5], [0, 4, 3], [1, 4, 5], [0, 2, 3, 5], [1, 3, 4]],
   ];
   for (let i = 0; i < howlong[type]; i += 1) {
     nodeList.push({
@@ -87,20 +87,20 @@ export const search = (nodeList: Node[], searchName: string): GProcess[] => {
 };
 
 export function find(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number, to = 5, findName: string): GProcess[] {
+  from: number, findName: string): GProcess[] {
   let process: GProcess[] = [];
   switch (findName) {
     case 'prim':
       process = prim(nodeList, lineMap, from);
       break;
     case 'kruskal':
-      process = kruskal(nodeList, lineMap, from);
+      process = kruskal(nodeList, lineMap);
       break;
     case 'dijkstra':
-      process = dijkstra(nodeList, lineMap, from, to);
+      process = dijkstra(nodeList, lineMap, from);
       break;
     case 'bellmanFord':
-      process = bellmanFord(nodeList, lineMap, from, to);
+      process = bellmanFord(nodeList, lineMap, from);
       break;
     default:
       break;
@@ -166,5 +166,50 @@ export function fixedRendering(nodeList: FixedNode[], lineMap: Map<string, Weigh
   process: GProcess): [FixedNode[], Map<string, WeightedLine>] {
   const NList = nodeList.slice();
   const LMap = lineMap;
+  const NVisited = process.visitedNode;
+  const LVisited = process.visitedLine;
+  const NTargets = process.targetNodes;
+  // 단계를 위한 초기화
+  for (let i = 0; i < NList.length; i += 1) {
+    NList[i].color = 'grey';
+  }
+  LMap.forEach((value, key) => {
+    const line = LMap.get(key);
+    if (line !== undefined) {
+      line.color = 'black';
+      LMap.set(key, line);
+    }
+  });
+  // 이미 방문된 것들 색 바꿔주기
+  for (let i = 0; i < NVisited.length; i += 1) {
+    NList[NVisited[i]].color = '#2ee22e';
+  }
+  for (let i = 0; i < LVisited.length; i += 1) {
+    const line = LMap.get(LVisited[i]);
+    if (line !== undefined) {
+      line.color = '#2ee22e';
+      LMap.set(LVisited[i], line);
+    }
+  }
+  const line = LMap.get(process.targetLine);
+  if (process.phase === 'check') {
+    if (line !== undefined) {
+      line.color = 'orange';
+      LMap.set(process.targetLine, line);
+    }
+    if (NTargets.length > 0) {
+      NList[NTargets[0]].color = 'orange';
+      NList[NTargets[1]].color = 'yellow';
+    }
+  } else if (process.phase === 'connect') {
+    if (line !== undefined) {
+      line.color = '#2ee22e';
+      LMap.set(process.targetLine, line);
+    }
+    if (NTargets.length > 0) {
+      NList[NTargets[0]].color = '#2ee22e';
+      NList[NTargets[1]].color = '#2ee22e';
+    }
+  }
   return [NList.slice(), LMap];
 }
