@@ -1,4 +1,6 @@
-import { Node, GProcess } from '../../util';
+import {
+  Node, GProcess, FixedNode, WeightedLine,
+} from '../../util';
 
 export function bfs(nodeList: Node[]): GProcess[] {
   const visited: boolean[] = new Array<false>(10);
@@ -220,5 +222,29 @@ export function dfsR(nodeList: Node[]): GProcess[] {
     phase: 'done',
     list: stack.map((el) => el[1]),
   });
+  return process;
+}
+
+export function prim(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
+  from: number): GProcess[] {
+  const process: GProcess[] = [];
+  return process;
+}
+
+export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
+  from: number): GProcess[] {
+  const process: GProcess[] = [];
+  return process;
+}
+
+export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
+  from: number, to: number): GProcess[] {
+  const process: GProcess[] = [];
+  return process;
+}
+
+export function bellmanFord(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
+  from: number, to: number): GProcess[] {
+  const process: GProcess[] = [];
   return process;
 }
