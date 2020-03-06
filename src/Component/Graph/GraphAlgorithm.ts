@@ -313,7 +313,6 @@ export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine
 export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   from: number, to: number): GProcess[] {
   const process: GProcess[] = [];
-
   return process;
 }
 
