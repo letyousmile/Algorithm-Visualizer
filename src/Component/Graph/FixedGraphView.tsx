@@ -28,16 +28,16 @@ let wholeSearchProcess: GProcess[];
 let processLength: number;
 let initialization = false;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function FixedGraphView(info: any): JSX.Element {
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
-  const [toggle, setToggle] = useState(false);
   const data = makeFixedGraph(0);
   const [graphNodes, setGraphNodes] = useState<FixedNode[]>(data[0]);
   const [graphLines, setGraphLines] = useState<Map<string, WeightedLine>>(data[1]);
   if (graphNodes !== undefined) {
     if (initialization) {
-      wholeSearchProcess = find(graphNodes, graphLines, 0, 5, pathName);
+      wholeSearchProcess = find(graphNodes, graphLines, 0, pathName);
       processLength = wholeSearchProcess.length;
     }
   }
@@ -85,7 +85,7 @@ function FixedGraphView(info: any): JSX.Element {
   // 멈춤 flag를 해제하는 함수.(진행하는 함수 아니고 멈춤을 해제하는거임)
   function play(): void {
     if (processLength === undefined) {
-      wholeSearchProcess = find(graphNodes, graphLines, 0, 5, pathName);
+      wholeSearchProcess = find(graphNodes, graphLines, 0, pathName);
       processLength = wholeSearchProcess.length;
     }
     playing = true;
@@ -138,15 +138,7 @@ function FixedGraphView(info: any): JSX.Element {
         <IconButton aria-label="skipNext" onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>
           <SkipNextIcon />
         </IconButton>
-        {!toggle && <Button className={classes.button} size="medium" onClick={(): void => { if (!toggle) { setToggle(true); } else { setToggle(false); } }}>그래프생성</Button>}
-        {toggle
-          && (
-            <div>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(1); stop(); }}>1</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(1); stop(); }}>2</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(1); stop(); }}>3</Button>
-            </div>
-          )}
+        <Button className={classes.button} size="medium" onClick={(): void => { makeRandomNumber(1); stop(); }}>그래프생성</Button>
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed > 100) { speed -= 100; } }}>빠르게</Button>
       </div>

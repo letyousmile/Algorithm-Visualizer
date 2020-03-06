@@ -87,20 +87,20 @@ export const search = (nodeList: Node[], searchName: string): GProcess[] => {
 };
 
 export function find(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number, to = 5, findName: string): GProcess[] {
+  from: number, findName: string): GProcess[] {
   let process: GProcess[] = [];
   switch (findName) {
     case 'prim':
       process = prim(nodeList, lineMap, from);
       break;
     case 'kruskal':
-      process = kruskal(nodeList, lineMap, from);
+      process = kruskal(nodeList, lineMap);
       break;
     case 'dijkstra':
-      process = dijkstra(nodeList, lineMap, from, to);
+      process = dijkstra(nodeList, lineMap, from);
       break;
     case 'bellmanFord':
-      process = bellmanFord(nodeList, lineMap, from, to);
+      process = bellmanFord(nodeList, lineMap, from);
       break;
     default:
       break;

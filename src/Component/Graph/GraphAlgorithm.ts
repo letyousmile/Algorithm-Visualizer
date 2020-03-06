@@ -231,20 +231,19 @@ export function prim(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   return process;
 }
 
-export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number): GProcess[] {
+export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>): GProcess[] {
   const process: GProcess[] = [];
   return process;
 }
 
 export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number, to: number): GProcess[] {
+  from: number): GProcess[] {
   const process: GProcess[] = [];
   return process;
 }
 
 export function bellmanFord(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number, to: number): GProcess[] {
+  from: number): GProcess[] {
   const process: GProcess[] = [];
   return process;
 }

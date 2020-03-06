@@ -12,9 +12,9 @@ function FixedGraphNodes({ graphNodes, graphLines }: any): JSX.Element {
   const lines = graphLines.map((line: WeightedLine) => (
     <g key={line.key}>
       <line
-        x1={graphNodes[line.from].x + window.innerWidth / 2}
+        x1={graphNodes[line.from].x + window.innerWidth / 3}
         y1={graphNodes[line.from].y + window.innerHeight / 5}
-        x2={graphNodes[line.to].x + window.innerWidth / 2}
+        x2={graphNodes[line.to].x + window.innerWidth / 3}
         y2={graphNodes[line.to].y + window.innerHeight / 5}
         style={{
           stroke: line.color,
@@ -25,8 +25,8 @@ function FixedGraphNodes({ graphNodes, graphLines }: any): JSX.Element {
         textRendering={line.weight}
       />
       <text
-        x={((graphNodes[line.from].x + window.innerWidth / 2)
-          + (graphNodes[line.to].x + window.innerWidth / 2)) / 2 + 20}
+        x={((graphNodes[line.from].x + window.innerWidth / 3)
+          + (graphNodes[line.to].x + window.innerWidth / 3)) / 2 + 20}
         y={((graphNodes[line.from].y + window.innerHeight / 5)
           + (graphNodes[line.to].y + window.innerHeight / 5)) / 2 - 20}
         textAnchor="middle"
