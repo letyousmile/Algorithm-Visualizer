@@ -234,7 +234,7 @@ export function prim(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
 export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   from: number): GProcess[] {
   const process: GProcess[] = [];
-  const list: any[] = [];
+  const list: WeightedLine[] = [];
   const parentArr: number[] = [];
   const visitedNode: Set<number> = new Set<number>();
   const visitedLine: string[] = [];
@@ -269,19 +269,15 @@ export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine
   }
 
 
-  lineMap.forEach((value, key, map) => {
-    list.push({
-      key,
-      weightedLine: value,
-    });
+  lineMap.forEach((value) => {
+    list.push(value);
   });
 
-  list.sort((item1: any, item2: any) => {
-    if (item1.weightedLine.weight > item2.weightedLine.weight) return 1;
-    if (item1.weightedLine.weight === item2.weightedLine.weight) return 0;
+  list.sort((item1: WeightedLine, item2: WeightedLine) => {
+    if (item1.weight > item2.weight) return 1;
+    if (item1.weight === item2.weight) return 0;
     return -1;
   });
-  console.log('list', list);
   for (let i = 0; i < nodeList.length; i += 1) {
     parentArr.push(i);
   }
@@ -292,28 +288,25 @@ export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine
     }
     // 현재 간선 표시 (current)
     process.push({
-      visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].weightedLine.to, list[i].weightedLine.from], targetLine: list[i].key, phase: 'check', list: [],
+      visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].to, list[i].from], targetLine: list[i].key, phase: 'check', list: [],
     });
-    if (!isSameGroup(list[i].weightedLine.to, list[i].weightedLine.from)) {
-      unionGroup(list[i].weightedLine.to, list[i].weightedLine.from);
+    if (!isSameGroup(list[i].to, list[i].from)) {
+      unionGroup(list[i].to, list[i].from);
       // 간선 색 표시 (enable)
-      visitedNode.add(list[i].weightedLine.to);
-      visitedNode.add(list[i].weightedLine.from);
+      visitedNode.add(list[i].to);
+      visitedNode.add(list[i].from);
       visitedLine.push(list[i].key);
       process.push({
-        visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].weightedLine.to, list[i].weightedLine.from], targetLine: list[i].key, phase: 'connect', list: [],
+        visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].to, list[i].from], targetLine: list[i].key, phase: 'connect', list: [],
       });
     }
   }
-  console.log(parentArr);
-  console.log(process);
   return process;
 }
 
 export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   from: number, to: number): GProcess[] {
   const process: GProcess[] = [];
-
   return process;
 }
 
