@@ -52,7 +52,7 @@ export function makeFixedGraph(type: number): [FixedNode[], Map<string, Weighted
     [[0, 0], [400, 0], [170, 150], [230, 250], [0, 400], [400, 400]],
   ];
   const connetion: number[][][] = [
-    [[1, 2, 4], [0, 3, 5], [0, 4, 3], [1, 4, 5], [0, 2, 3, 5], [1, 3, 4]],
+    [[1, 2, 4], [0, 3, 5], [0, 4, 3], [1, 2, 4, 5], [0, 2, 3, 5], [1, 3, 4]],
   ];
   for (let i = 0; i < howlong[type]; i += 1) {
     nodeList.push({
