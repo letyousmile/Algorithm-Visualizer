@@ -234,12 +234,86 @@ export function prim(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
 export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   from: number): GProcess[] {
   const process: GProcess[] = [];
+  const list: any[] = [];
+  const parentArr: number[] = [];
+  const visitedNode: Set<number> = new Set<number>();
+  const visitedLine: string[] = [];
+
+  function findParent(child: number): number {
+    if (child === parentArr[child]) return child;
+    parentArr[child] = findParent(parentArr[child]);
+    return parentArr[child];
+  }
+
+  function isAllSameParent(parentList: number[]): boolean {
+    const parent: number = findParent(parentList[0]);
+    let result = true;
+    for (let i = 1; i < parentList.length; i += 1) {
+      if (parent !== findParent(parentList[i])) {
+        result = false;
+        break;
+      }
+    }
+    return result;
+  }
+
+  function isSameGroup(child1: number, child2: number): boolean {
+    return findParent(child1) === findParent(child2);
+  }
+
+  function unionGroup(child1: number, child2: number): void {
+    const parent1 = findParent(child1);
+    const parent2 = findParent(child2);
+
+    parentArr[parent1] = parent2;
+  }
+
+
+  lineMap.forEach((value, key, map) => {
+    list.push({
+      key,
+      weightedLine: value,
+    });
+  });
+
+  list.sort((item1: any, item2: any) => {
+    if (item1.weightedLine.weight > item2.weightedLine.weight) return 1;
+    if (item1.weightedLine.weight === item2.weightedLine.weight) return 0;
+    return -1;
+  });
+  console.log('list', list);
+  for (let i = 0; i < nodeList.length; i += 1) {
+    parentArr.push(i);
+  }
+  for (let i = 0; i < list.length; i += 1) {
+    if (isAllSameParent(parentArr)) {
+      // 종료
+      break;
+    }
+    // 현재 간선 표시 (current)
+    process.push({
+      visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].weightedLine.to, list[i].weightedLine.from], targetLine: list[i].key, phase: 'check', list: [],
+    });
+    if (!isSameGroup(list[i].weightedLine.to, list[i].weightedLine.from)) {
+      unionGroup(list[i].weightedLine.to, list[i].weightedLine.from);
+      // 간선 색 표시 (enable)
+      visitedNode.add(list[i].weightedLine.to);
+      visitedNode.add(list[i].weightedLine.from);
+      visitedLine.push(list[i].key);
+      process.push({
+        visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].weightedLine.to, list[i].weightedLine.from], targetLine: list[i].key, phase: 'connect', list: [],
+      });
+    }
+  }
+  console.log(parentArr);
+  console.log(process);
   return process;
 }
 
 export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   from: number, to: number): GProcess[] {
   const process: GProcess[] = [];
+
   return process;
 }
 
