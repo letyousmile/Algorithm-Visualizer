@@ -34,3 +34,19 @@ export type GProcess = {
   phase: string;
   list: number[];
 };
+
+export type FixedNode = {
+  key: number;
+  connected: number[];
+  color: string;
+  x: number;
+  y: number;
+};
+
+export type WeightedLine = {
+  key: string;
+  from: number;
+  to: number;
+  color: string;
+  weight: number;
+};

@@ -1,5 +1,9 @@
-import { Node, Line, GProcess } from '../../util';
-import { bfs, dfs } from './GraphAlgorithm';
+import {
+  Node, Line, GProcess, FixedNode, WeightedLine,
+} from '../../util';
+import {
+  bfs, dfs, prim, kruskal, dijkstra, bellmanFord,
+} from './GraphAlgorithm';
 
 export function makeGraph(density = 'normal'): [Node[], Map<string, Line>] {
   const len = 10;
@@ -39,6 +43,34 @@ export function makeGraph(density = 'normal'): [Node[], Map<string, Line>] {
   }
   return [nodeList, lineMap];
 }
+
+export function makeFixedGraph(type: number): [FixedNode[], Map<string, WeightedLine>] {
+  const nodeList: FixedNode[] = [];
+  const lineMap = new Map<string, WeightedLine>();
+  const howlong: number[] = [6];
+  const location: number[][][] = [
+    [[0, 0], [400, 0], [170, 150], [230, 250], [0, 400], [400, 400]],
+  ];
+  const connetion: number[][][] = [
+    [[1, 2, 4], [0, 3, 5], [0, 4, 3], [2, 4, 5], [0, 2, 3, 5], [1, 3, 4]],
+  ];
+  for (let i = 0; i < howlong[type]; i += 1) {
+    nodeList.push({
+      key: i, connected: connetion[type][i], color: 'grey', x: location[type][i][0], y: location[type][i][1],
+    });
+    const from = i;
+    for (let j = 0; j < connetion[type][i].length; j += 1) {
+      const to = connetion[type][i][j];
+      const key = from < to ? `${from}to${to}` : `${to}to${from}`;
+      const line: WeightedLine = {
+        key, from, to, color: 'black', weight: Math.floor(Math.random() * 30),
+      };
+      lineMap.set(key, line);
+    }
+  }
+  return [nodeList, lineMap];
+}
+
 export const search = (nodeList: Node[], searchName: string): GProcess[] => {
   let process: GProcess[] = [];
   switch (searchName) {
@@ -53,8 +85,31 @@ export const search = (nodeList: Node[], searchName: string): GProcess[] => {
   }
   return process;
 };
-export function rendering(nodeList: Node[], lineMap: Map<string, Line>, process: GProcess):
-[Node[], Map<string, Line>] {
+
+export function find(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
+  from: number, to = 5, findName: string): GProcess[] {
+  let process: GProcess[] = [];
+  switch (findName) {
+    case 'prim':
+      process = prim(nodeList, lineMap, from);
+      break;
+    case 'kruskal':
+      process = kruskal(nodeList, lineMap, from);
+      break;
+    case 'dijkstra':
+      process = dijkstra(nodeList, lineMap, from, to);
+      break;
+    case 'bellmanFord':
+      process = bellmanFord(nodeList, lineMap, from, to);
+      break;
+    default:
+      break;
+  }
+  return process;
+}
+
+export function rendering(nodeList: Node[], lineMap: Map<string, Line>,
+  process: GProcess): [Node[], Map<string, Line>] {
   const NList = nodeList.slice();
   const LMap = lineMap;
   const NVisited = process.visitedNode;
@@ -104,5 +159,12 @@ export function rendering(nodeList: Node[], lineMap: Map<string, Line>, process:
     line.color = '#ff9400';
     LMap.set(process.targetLine, line);
   }
+  return [NList.slice(), LMap];
+}
+
+export function fixedRendering(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
+  process: GProcess): [FixedNode[], Map<string, WeightedLine>] {
+  const NList = nodeList.slice();
+  const LMap = lineMap;
   return [NList.slice(), LMap];
 }
