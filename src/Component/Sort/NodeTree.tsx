@@ -102,6 +102,7 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
           stroke: line.color,
           strokeWidth: 2,
           zIndex: 1,
+          visibility: line.display === 'visible' ? 'visible' : 'hidden',
         }}
         key={line.key.toString()}
       />
