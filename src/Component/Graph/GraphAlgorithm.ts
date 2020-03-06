@@ -226,8 +226,65 @@ export function dfsR(nodeList: Node[]): GProcess[] {
 }
 
 export function prim(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number): GProcess[] {
+  start: number): GProcess[] {
   const process: GProcess[] = [];
+  const visitedNode: number[] = [start];
+  const visitedLine: string[] = [];
+  let targetLine = '';
+  let here = start;
+  const visited: boolean[] = new Array<false>(5);
+  visited[here] = true;
+  let visitedNum = 1;
+  let hereNode = nodeList[here];
+  const lineList: WeightedLine[] = [];
+  while (visitedNum < 6) {
+    hereNode = nodeList[here];
+    for (let i = 0; i < hereNode.connected.length; i += 1) {
+      const there = hereNode.connected[i];
+      const from = here < there ? here.toString() : there.toString();
+      const to = here > there ? here.toString() : there.toString();
+      targetLine = from.concat('to').concat(to);
+      const line = lineMap.get(targetLine);
+      if (line !== undefined) {
+        lineList.push(line);
+      }
+    }
+    lineList.sort((a, b) => a.weight - b.weight);
+    while (lineList.length !== 0) {
+      const line = lineList[0];
+      lineList.shift();
+      if (!visitedLine.includes(line.key)) {
+        const from = Number(line.key.charAt(0));
+        const to = Number(line.key.charAt(3));
+        process.push({
+          visitedNode: visitedNode.slice(),
+          visitedLine: visitedLine.slice(),
+          targetNodes: [from, to],
+          targetLine: `${from}to${to}`,
+          phase: 'check',
+          list: [],
+        });
+        if (!visited[from] || !visited[to]) {
+          const obj1 = visited[from] ? to : from;
+          const obj2 = visited[from] ? from : to;
+          visited[obj1] = true;
+          visitedNum += 1;
+          visitedNode.push(obj1);
+          visitedLine.push(`${from}to${to}`);
+          here = obj1;
+          process.push({
+            visitedNode: visitedNode.slice(),
+            visitedLine: visitedLine.slice(),
+            targetNodes: [obj1, obj2],
+            targetLine: `${from}to${to}`,
+            phase: 'connect',
+            list: [],
+          });
+          break;
+        }
+      }
+    }
+  }
   return process;
 }
 

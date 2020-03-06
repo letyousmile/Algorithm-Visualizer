@@ -32,6 +32,7 @@ let initialization = false;
 function FixedGraphView(info: any): JSX.Element {
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
+  const [toggle, setToggle] = useState(false);
   const data = makeFixedGraph(0);
   const [graphNodes, setGraphNodes] = useState<FixedNode[]>(data[0]);
   const [graphLines, setGraphLines] = useState<Map<string, WeightedLine>>(data[1]);
@@ -138,7 +139,15 @@ function FixedGraphView(info: any): JSX.Element {
         <IconButton aria-label="skipNext" onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>
           <SkipNextIcon />
         </IconButton>
-        <Button className={classes.button} size="medium" onClick={(): void => { makeRandomNumber(1); stop(); }}>그래프생성</Button>
+        {!toggle && <Button className={classes.button} size="medium" onClick={(): void => { if (!toggle) { setToggle(true); } else { setToggle(false); } }}>그래프생성</Button>}
+        {toggle
+          && (
+            <div>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(0); stop(); }}>1</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(0); stop(); }}>2</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(0); stop(); }}>3</Button>
+            </div>
+          )}
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed > 100) { speed -= 100; } }}>빠르게</Button>
       </div>
