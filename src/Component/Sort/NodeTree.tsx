@@ -14,7 +14,7 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
     const nodeCntInCurDepth = 2 ** currentDepth;
     const positionInCurDepth = (graphNode.index + 1) - nodeCntInCurDepth;
     const getXPosition = positionInCurDepth * widthInterval
-                          - (widthInterval / 2) * (nodeCntInCurDepth - 1) - 25;
+      - (widthInterval / 2) * (nodeCntInCurDepth - 1) - 25 + window.innerWidth / 2;
     const getYPosition = currentDepth * 100 + 100;
 
     return (
@@ -59,7 +59,7 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
         color: 'black',
         borderRadius: '25px',
         border: '1px solid black',
-        transform: `translate(${graphNode.index * 50 - sortedNodes.length * 25}px, 0px)`,
+        transform: `translate(${graphNode.index * 50 - sortedNodes.length * 25 + window.innerWidth / 2}px, 0px)`,
         WebkitTransition: ' -webkit-transform 0.2s',
         transition: 'transform 0.2s',
       }}
@@ -87,10 +87,10 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
     const positionInCurDepthTo = (line.to + 1) - nodeCntInCurDepthTo;
     const positionInCurDepthFrom = (line.from + 1) - nodeCntInCurDepthFrom;
     const getXPositionTo = positionInCurDepthTo * widthIntervalTo
-                          - (widthIntervalTo / 2) * (nodeCntInCurDepthTo - 1);
+      - (widthIntervalTo / 2) * (nodeCntInCurDepthTo - 1) + window.innerWidth / 2;
     const getYPositionTo = currentDepthTo * 100 + 125;
     const getXPositionFrom = positionInCurDepthFrom * widthIntervalFrom
-                          - (widthIntervalFrom / 2) * (nodeCntInCurDepthFrom - 1);
+      - (widthIntervalFrom / 2) * (nodeCntInCurDepthFrom - 1) + window.innerWidth / 2;
     const getYPositionFrom = currentDepthFrom * 100 + 125;
     return (
       <line
@@ -107,16 +107,14 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
       />
     );
   });
-  const flex = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  };
   return (
-    <div style={flex}>
+    <div>
       {NodeTrees}
       {sortedNode}
-      <svg height="1000px" width="1000px">
+      <svg
+        height="700px"
+        width={window.innerWidth}
+      >
         {paintLines}
       </svg>
     </div>

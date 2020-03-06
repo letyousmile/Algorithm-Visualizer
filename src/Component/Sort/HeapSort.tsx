@@ -187,7 +187,7 @@ function HSort(): JSX.Element {
       </div>
       <div style={{
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
       }}
       >
         <NodeTree graphNodes={graphNodes} sortedNodes={graphNodes} lines={graphLines} />

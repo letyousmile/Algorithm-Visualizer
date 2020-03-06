@@ -7,7 +7,7 @@ function SortBar({ graphBars }: any): JSX.Element {
   const SortBars = graphBars.map((graphBar: GraphBar) => (
     <div
       style={{
-        bottom: '300px',
+        bottom: '500px',
         position: 'absolute',
         width: '50px',
         height: `${(graphBar.value * 20) + 50}px`,

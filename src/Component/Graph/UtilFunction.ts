@@ -89,6 +89,16 @@ export function rendering(nodeList: Node[], lineMap: Map<string, Line>, process:
       NList[NTargets[1]].color = 'yellow';
     }
   }
+  if (process.phase === 'pop') {
+    if (NTargets.length > 0) {
+      NList[NTargets[0]].color = 'orange';
+    }
+  }
+  if (process.phase === 'afterVisit') {
+    if (NTargets.length > 0) {
+      NList[NTargets[0]].color = 'orange';
+    }
+  }
   const line = LMap.get(process.targetLine);
   if (line !== undefined) {
     line.color = '#ff9400';
