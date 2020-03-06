@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { GraphBar, Process } from '../../util';
 import {
-  bubbleSort, selectionSort, insertionSort, quickSort, mergeSort,
+  bubbleSort, selectionSort, insertionSort, quickSort, mergeSort, heapSort,
 } from './SortAlgorithm';
 
 export function makeRandomList(howSorted = 'random'): GraphBar[] {
@@ -218,6 +218,9 @@ export const sort = (list: GraphBar[], sortName: string): Process[] => {
       break;
     case 'MSort':
       process = mergeSort(list, keyList);
+      break;
+    case 'HSort':
+      process = heapSort(list);
       break;
     default:
       break;
