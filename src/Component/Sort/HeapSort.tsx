@@ -24,7 +24,7 @@ function HSort(): JSX.Element {
       };
       if (j > 0) {
         const tempLine = {
-          key: j - 1, from: j, to: Math.floor((j - 1) / 2), color: 'black',
+          key: j - 1, from: j, to: Math.floor((j - 1) / 2), color: 'black', display: 'hidden',
         };
         line.push(tempLine);
       }
@@ -39,10 +39,18 @@ function HSort(): JSX.Element {
 
   // heapSort();
 
-  function rendering(list: GraphBar[], process: Process[], depth: number): GraphBar[] {
+  function rendering(
+    list: GraphBar[],
+    lines: Line[],
+    process: Process[],
+    depth: number,
+  ): [GraphBar[], Line[]] {
     for (let i = 0; i < list.length; i += 1) {
       list[i].display = 'hidden';
       list[i].color = '#f54141';
+      if (i !== 0) {
+        lines[i - 1].display = 'hidden';
+      }
       if (depth === 0) {
         list[i].index = i;
       }
@@ -51,7 +59,7 @@ function HSort(): JSX.Element {
       }
     }
     if (process[depth].phase === 'done') {
-      return list.slice();
+      return [list.slice(), lines.slice()];
     }
     for (let i = 0; i < process[depth].arr.length; i += 1) {
       list[process[depth].arr[i]].display = 'visible';
@@ -59,6 +67,9 @@ function HSort(): JSX.Element {
       list[process[depth].arr[i]].color = '#f54141';
       // 그래프의 위치 인덱스 변경.
       list[process[depth].arr[i]].index = i;
+      if (i > 0) {
+        lines[i - 1].display = 'visible';
+      }
       // 소팅 알고리즘 진행 상황에따라 그래프의 색과 높이 변경.
       if (process[depth].phase === 'change') {
         if (list[process[depth].arr[i]].index
@@ -79,16 +90,22 @@ function HSort(): JSX.Element {
         if (list[process[depth].arr[i]].index
           === process[depth].targets[0]) {
           list[process[depth].arr[i]].display = 'visible';
+          if (process[depth].arr[i] > 0) {
+            lines[process[depth].arr[i] - 1].display = 'visible';
+          }
         }
       } else if (process[depth].phase === 'remove') {
         if (list[process[depth].arr[i]].index
           === process[depth].targets[0]) {
           list[process[depth].arr[i]].display = 'hidden';
+          if (process[depth].arr.length > 1) {
+            lines[process[depth].arr.length - 2].display = 'hidden';
+          }
         }
       }
     }
 
-    return list.slice();
+    return [list.slice(), lines.slice()];
   }
 
   // 소팅 알고리즘의 현재 진행 정도를 저장해 놓는 변수.
@@ -112,7 +129,9 @@ function HSort(): JSX.Element {
       if (depth < processLength && depth > -1) {
         // 현재 depth 저장.
         setDepth(depth);
-        setNode(rendering(graphNodes, wholeSortProcess, depth));
+        const renderResult = rendering(graphNodes, graphLines, wholeSortProcess, depth);
+        setNode(renderResult[0]);
+        setLines(renderResult[1]);
       }
     }
   }
@@ -121,6 +140,7 @@ function HSort(): JSX.Element {
   function makeRandomNumber(): void {
     const temp: [GraphBar[], Line[]] = makeRandomList();
     setNode(temp[0]);
+    setLines(temp[1]);
     setDepth(0);
     wholeSortProcess = sort(temp[0], 'HSort');
     processLength = wholeSortProcess.length;

@@ -24,6 +24,7 @@ export type Line = {
   from: number;
   to: number;
   color: string;
+  display?: string;
 };
 export type GProcess = {
   visitedNode: number[];
