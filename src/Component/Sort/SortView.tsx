@@ -29,6 +29,7 @@ let initialization = false;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SortView(info: any): JSX.Element {
+  console.log(initialization);
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
@@ -112,7 +113,7 @@ function SortView(info: any): JSX.Element {
 
   return (
     <div style={{
-      height: '700px',
+      height: window.innerHeight,
     }}
     >
       <div style={{
