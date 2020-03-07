@@ -15,7 +15,7 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
     const positionInCurDepth = (graphNode.index + 1) - nodeCntInCurDepth;
     const getXPosition = positionInCurDepth * widthInterval
       - (widthInterval / 2) * (nodeCntInCurDepth - 1) - 25 + window.innerWidth / 2;
-    const getYPosition = currentDepth * 100 + 100;
+    const getYPosition = currentDepth * (window.innerHeight / 10) + (window.innerHeight / 10);
 
     return (
       <div
@@ -50,7 +50,7 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
   const sortedNode = sortedNodes.map((graphNode: GraphBar) => (
     <div
       style={{
-        bottom: '250px',
+        bottom: `${window.innerHeight / 4}PX`,
         position: 'absolute',
         width: '50px',
         height: '50px',
