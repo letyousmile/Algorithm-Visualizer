@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { GraphBar } from '../../util';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SortBar({ graphBars }: any): JSX.Element {
   const SortBars = graphBars.map((graphBar: GraphBar) => (
     <div
@@ -34,6 +35,8 @@ function SortBar({ graphBars }: any): JSX.Element {
       display: 'flex',
       alignItems: 'flex-start',
       flexDirection: 'column-reverse',
+      position: 'absolute',
+      top: '200px',
     }}
     >
       {SortBars}

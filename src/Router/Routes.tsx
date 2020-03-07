@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import Main from '../Main';
 import SortView from '../Component/Sort/SortView';
 import HSort from '../Component/Sort/HeapSort';
@@ -22,7 +22,6 @@ function Routes(): JSX.Element {
         <Route path="/prim" component={FixedGraphView} />
         <Route path="/kruskal" component={FixedGraphView} />
         <Route path="/dijkstra" component={FixedGraphView} />
-        <Route path="/bellmanFord" component={FixedGraphView} />
       </Switch>
     </Router>
   );
