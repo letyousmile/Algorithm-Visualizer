@@ -17,7 +17,7 @@ function Main(): JSX.Element {
     <div className={classes.mainContent}>
       <Container maxWidth="sm">
         <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-          Alogirhtm Visualizer
+          Algorithm Visualizer
         </Typography>
         <Typography variant="h5" align="center" color="textSecondary" paragraph>
           어려운 알고리즘들을 눈으로 확인해보세요.
