@@ -16,6 +16,7 @@ function FixedGraphNodes({ graphNodes, graphLines, list }: any): JSX.Element {
       textAnchor="middle"
       stroke="red"
       dy=".1em"
+      // eslint-disable-next-line react/no-array-index-key
       key={i}
     >
       {minimum !== 999999 ? minimum : '∞'}

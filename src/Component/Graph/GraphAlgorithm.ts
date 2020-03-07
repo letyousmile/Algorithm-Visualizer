@@ -429,6 +429,7 @@ export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLin
         const lineKey = now < connection[i] ? `${now}to${connection[i]}` : `${connection[i]}to${now}`;
 
         nowMinTo[connection[i]] = Math.min(nowMinTo[connection[i]]
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           , (nowMinTo[now] + lineMap.get(lineKey)!.weight));
 
         targetLine = lineKey;
