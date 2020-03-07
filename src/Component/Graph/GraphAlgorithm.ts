@@ -480,6 +480,5 @@ export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLin
     phase: 'done',
     list: nowMinTo.slice(),
   });
-  console.log('table', table);
   return process;
 }
