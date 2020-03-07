@@ -28,6 +28,7 @@ let wholeSearchProcess: GProcess[];
 let processLength: number;
 let initialization = false;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function GraphView(info: any): JSX.Element {
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
@@ -40,7 +41,6 @@ function GraphView(info: any): JSX.Element {
   if (graphNodes !== undefined) {
     if (initialization) {
       wholeSearchProcess = search(graphNodes, pathName);
-      console.log(wholeSearchProcess);
       processLength = wholeSearchProcess.length;
     }
   }

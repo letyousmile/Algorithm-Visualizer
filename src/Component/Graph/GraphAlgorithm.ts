@@ -226,14 +226,137 @@ export function dfsR(nodeList: Node[]): GProcess[] {
 }
 
 export function prim(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number): GProcess[] {
+  start: number): GProcess[] {
   const process: GProcess[] = [];
+  const visitedNode: number[] = [start];
+  const visitedLine: string[] = [];
+  let targetLine = '';
+  let here = start;
+  const visited: boolean[] = new Array<false>(5);
+  visited[here] = true;
+  let visitedNum = 1;
+  let hereNode = nodeList[here];
+  const lineList: WeightedLine[] = [];
+  while (visitedNum < 6) {
+    hereNode = nodeList[here];
+    for (let i = 0; i < hereNode.connected.length; i += 1) {
+      const there = hereNode.connected[i];
+      const from = here < there ? here.toString() : there.toString();
+      const to = here > there ? here.toString() : there.toString();
+      targetLine = from.concat('to').concat(to);
+      const line = lineMap.get(targetLine);
+      if (line !== undefined) {
+        lineList.push(line);
+      }
+    }
+    lineList.sort((a, b) => a.weight - b.weight);
+    while (lineList.length !== 0) {
+      const line = lineList[0];
+      lineList.shift();
+      if (!visitedLine.includes(line.key)) {
+        const from = Number(line.key.charAt(0));
+        const to = Number(line.key.charAt(3));
+        process.push({
+          visitedNode: visitedNode.slice(),
+          visitedLine: visitedLine.slice(),
+          targetNodes: [from, to],
+          targetLine: `${from}to${to}`,
+          phase: 'check',
+          list: [],
+        });
+        if (!visited[from] || !visited[to]) {
+          const obj1 = visited[from] ? to : from;
+          const obj2 = visited[from] ? from : to;
+          visited[obj1] = true;
+          visitedNum += 1;
+          visitedNode.push(obj1);
+          visitedLine.push(`${from}to${to}`);
+          here = obj1;
+          process.push({
+            visitedNode: visitedNode.slice(),
+            visitedLine: visitedLine.slice(),
+            targetNodes: [obj1, obj2],
+            targetLine: `${from}to${to}`,
+            phase: 'connect',
+            list: [],
+          });
+          break;
+        }
+      }
+    }
+  }
   return process;
 }
 
-export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number): GProcess[] {
+export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>): GProcess[] {
   const process: GProcess[] = [];
+  const list: WeightedLine[] = [];
+  const parentArr: number[] = [];
+  const visitedNode: Set<number> = new Set<number>();
+  const visitedLine: string[] = [];
+
+  function findParent(child: number): number {
+    if (child === parentArr[child]) return child;
+    parentArr[child] = findParent(parentArr[child]);
+    return parentArr[child];
+  }
+
+  function isAllSameParent(parentList: number[]): boolean {
+    const parent: number = findParent(parentList[0]);
+    let result = true;
+    for (let i = 1; i < parentList.length; i += 1) {
+      if (parent !== findParent(parentList[i])) {
+        result = false;
+        break;
+      }
+    }
+    return result;
+  }
+
+  function isSameGroup(child1: number, child2: number): boolean {
+    return findParent(child1) === findParent(child2);
+  }
+
+  function unionGroup(child1: number, child2: number): void {
+    const parent1 = findParent(child1);
+    const parent2 = findParent(child2);
+
+    parentArr[parent1] = parent2;
+  }
+
+
+  lineMap.forEach((value) => {
+    list.push(value);
+  });
+
+  list.sort((item1: WeightedLine, item2: WeightedLine) => {
+    if (item1.weight > item2.weight) return 1;
+    if (item1.weight === item2.weight) return 0;
+    return -1;
+  });
+  for (let i = 0; i < nodeList.length; i += 1) {
+    parentArr.push(i);
+  }
+  for (let i = 0; i < list.length; i += 1) {
+    if (isAllSameParent(parentArr)) {
+      // 종료
+      break;
+    }
+    // 현재 간선 표시 (current)
+    process.push({
+      visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].to, list[i].from], targetLine: list[i].key, phase: 'check', list: [],
+    });
+    if (!isSameGroup(list[i].to, list[i].from)) {
+      unionGroup(list[i].to, list[i].from);
+      // 간선 색 표시 (enable)
+      visitedNode.add(list[i].to);
+      visitedNode.add(list[i].from);
+      visitedLine.push(list[i].key);
+      process.push({
+        visitedNode: Array.from(visitedNode), visitedLine: visitedLine.slice(), targetNodes: [list[i].to, list[i].from], targetLine: list[i].key, phase: 'connect', list: [],
+      });
+    }
+  }
   return process;
 }
 
@@ -277,28 +400,32 @@ export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLin
   while (flag) {
     const connection = nodeList[now].connected;
     for (let i = 0; i < connection.length; i += 1) {
-      const lineKey = now < connection[i] ? `${now}to${connection[i]}` : `${connection[i]}to${now}`;
-      visitedNode.push(now);
-      nowMinTo[connection[i]] = Math.min(nowMinTo[connection[i]]
-        , (nowMinTo[now] + lineMap.get(lineKey)!.weight));
+      if (!visited[connection[i]]) {
+        const lineKey = now < connection[i] ? `${now}to${connection[i]}` : `${connection[i]}to${now}`;
 
-      targetLine = lineKey;
-      process.push({
-        visitedNode: visitedNode.slice(),
-        visitedLine: visitedLine.slice(),
-        targetNodes: [now, connection[i]],
-        targetLine,
-        phase: 'compare',
-        list: nowMinTo.slice(),
-      });
+        nowMinTo[connection[i]] = Math.min(nowMinTo[connection[i]]
+          , (nowMinTo[now] + lineMap.get(lineKey)!.weight));
+
+        targetLine = lineKey;
+        process.push({
+          visitedNode: visitedNode.slice(),
+          visitedLine: visitedLine.slice(),
+          targetNodes: [now, connection[i]],
+          targetLine,
+          phase: 'compare',
+          list: nowMinTo.slice(),
+        });
+      }
     }
-    let nowMin = 999999;
+    let nowMin = 1000000;
     let finish = true;
+    let next = -1;
     for (let i = 0; i < nodeList.length; i += 1) {
       if (!visited[i]) {
-        if (nowMinTo[i] < nowMin) {
+        if (nowMinTo[i] <= nowMin) {
           finish = false;
           nowMin = nowMinTo[i];
+          next = i;
         }
       }
     }
@@ -306,10 +433,10 @@ export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLin
     if (finish) {
       break;
     } else {
-      now = nowMinTo.indexOf(nowMin);
-      visited[now] = true;
+      now = next;
 
       visitedNode.push(now);
+      visited[now] = true;
       process.push({
         visitedNode: visitedNode.slice(),
         visitedLine: visitedLine.slice(),
@@ -333,7 +460,7 @@ export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLin
 }
 
 export function bellmanFord(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number, to: number): GProcess[] {
+  from: number): GProcess[] {
   const process: GProcess[] = [];
   return process;
 }
