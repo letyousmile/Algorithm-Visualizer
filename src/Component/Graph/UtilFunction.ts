@@ -2,7 +2,7 @@ import {
   Node, Line, GProcess, FixedNode, WeightedLine,
 } from '../../util';
 import {
-  bfs, dfs, prim, kruskal, dijkstra, bellmanFord,
+  bfs, dfs, prim, kruskal, dijkstra,
 } from './GraphAlgorithm';
 
 export function makeGraph(density = 'normal'): [Node[], Map<string, Line>] {
@@ -98,9 +98,6 @@ export function find(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
       break;
     case 'dijkstra':
       process = dijkstra(nodeList, lineMap, from);
-      break;
-    case 'bellmanFord':
-      process = bellmanFord(nodeList, lineMap, from);
       break;
     default:
       break;

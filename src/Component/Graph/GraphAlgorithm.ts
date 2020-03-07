@@ -21,12 +21,20 @@ export function bfs(nodeList: Node[]): GProcess[] {
     targetNodes: [],
     targetLine,
     phase: 'start',
-    list: q.slice(),
+    list: q.slice(front + 1, rear + 1),
   });
   while (front !== rear) {
     front += 1;
     const here = q[front];
     const hereNode = nodeList[here];
+    process.push({
+      visitedNode: visitedNode.slice(),
+      visitedLine: visitedLine.slice(),
+      targetNodes: [here],
+      targetLine: '',
+      phase: 'pop',
+      list: q.slice(front + 1, rear + 1),
+    });
     for (let i = 0; i < hereNode.connected.length; i += 1) {
       const there = hereNode.connected[i];
       if (!visited[there]) {
@@ -44,7 +52,7 @@ export function bfs(nodeList: Node[]): GProcess[] {
           targetNodes: [here, there],
           targetLine,
           phase: 'visit',
-          list: q.slice(),
+          list: q.slice(front + 1, rear + 1),
         });
       }
     }
@@ -55,7 +63,7 @@ export function bfs(nodeList: Node[]): GProcess[] {
     targetNodes: [],
     targetLine: '',
     phase: 'done',
-    list: q.slice(),
+    list: q.slice(front + 1, rear + 1),
   });
   return process;
 }
@@ -230,6 +238,14 @@ export function prim(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   const process: GProcess[] = [];
   const visitedNode: number[] = [start];
   const visitedLine: string[] = [];
+  process.push({
+    visitedNode: [],
+    visitedLine: [],
+    targetNodes: [],
+    targetLine: '',
+    phase: 'start',
+    list: [],
+  });
   let targetLine = '';
   let here = start;
   const visited: boolean[] = new Array<false>(5);
@@ -294,6 +310,15 @@ export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine
   const parentArr: number[] = [];
   const visitedNode: Set<number> = new Set<number>();
   const visitedLine: string[] = [];
+
+  process.push({
+    visitedNode: [],
+    visitedLine: [],
+    targetNodes: [],
+    targetLine: '',
+    phase: 'start',
+    list: [],
+  });
 
   function findParent(child: number): number {
     if (child === parentArr[child]) return child;
@@ -361,12 +386,6 @@ export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine
 }
 
 export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number): GProcess[] {
-  const process: GProcess[] = [];
-  return process;
-}
-
-export function bellmanFord(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
   from: number): GProcess[] {
   const process: GProcess[] = [];
   return process;

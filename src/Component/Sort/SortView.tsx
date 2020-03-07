@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -38,7 +37,6 @@ function SortView(info: any): JSX.Element {
 
   if (graphBars !== undefined) {
     if (initialization) {
-      console.log('정렬다시함');
       wholeSortProcess = sort(graphBars, pathName);
       processLength = wholeSortProcess.length;
     }
@@ -57,7 +55,6 @@ function SortView(info: any): JSX.Element {
     initialization = false;
     // stop이 눌러졌는지 확인.
     if (playing) {
-      console.log(processLength);
       // 상태기억 배열의 길이를 벗어하는 depth가 들어왔는지 확인.
       if (depth < processLength && depth > -1) {
         // 현재 depth 저장.
@@ -70,7 +67,6 @@ function SortView(info: any): JSX.Element {
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
   function makeRandomNumber(howSorted = 'random'): void {
     const temp: GraphBar[] = makeRandomList(howSorted);
-    console.log(temp);
     setBar(temp);
     setDepth(0);
     initialization = true;
@@ -153,6 +149,7 @@ function SortView(info: any): JSX.Element {
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed > 100) { speed -= 100; } }}>빠르게</Button>
       </div>
+
       <div style={{
         display: 'flex',
         justifyContent: 'center',

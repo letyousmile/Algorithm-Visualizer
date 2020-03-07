@@ -22,7 +22,6 @@ function Routes(): JSX.Element {
         <Route path="/prim" component={FixedGraphView} />
         <Route path="/kruskal" component={FixedGraphView} />
         <Route path="/dijkstra" component={FixedGraphView} />
-        <Route path="/bellmanFord" component={FixedGraphView} />
       </Switch>
     </Router>
   );
