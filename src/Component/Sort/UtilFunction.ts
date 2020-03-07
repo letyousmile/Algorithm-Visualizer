@@ -1,16 +1,18 @@
 /* eslint-disable no-param-reassign */
 import { GraphBar, Process } from '../../util';
 import {
-  bubbleSort, selectionSort, insertionSort, quickSort, mergeSort,
+  bubbleSort, selectionSort, insertionSort, quickSort, mergeSort, heapSort,
 } from './SortAlgorithm';
 
 export function makeRandomList(howSorted = 'random'): GraphBar[] {
   let list: GraphBar[] = [];
+  const size = 10;
+  const max = 20;
   function random(): GraphBar[] {
     const tempList: GraphBar[] = [];
-    for (let j = 0; j < 10; j += 1) {
+    for (let j = 0; j < size; j += 1) {
       const tempBar = {
-        key: j, value: Math.floor(Math.random() * 21), color: '#f54141', index: j, sorted: false, height: 0,
+        key: j, value: Math.floor(Math.random() * (max + 1)), color: '#f54141', index: j, sorted: false, height: 0,
       };
       tempList.push(tempBar);
     }
@@ -19,15 +21,15 @@ export function makeRandomList(howSorted = 'random'): GraphBar[] {
   function increasing(): GraphBar[] {
     let k = 0;
     const tempList: GraphBar[] = [];
-    for (let j = 0; j < 10; j += 1) {
-      if (j <= 2) {
-        k = Math.floor(Math.random() * (6 - k)) + k;
-      } else if (j <= 5) {
-        k = Math.floor(Math.random() * (11 - k)) + k;
-      } else if (j <= 8) {
-        k = Math.floor(Math.random() * (16 - k)) + k;
+    for (let j = 0; j < size; j += 1) {
+      if (j <= Math.floor(size / 4)) {
+        k = Math.floor(Math.random() * (Math.floor(max / 4 + 1) - k)) + k;
+      } else if (j <= Math.floor(size / 2)) {
+        k = Math.floor(Math.random() * (Math.floor(max / 2 + 1) - k)) + k;
+      } else if (j <= Math.floor(size * 0.75)) {
+        k = Math.floor(Math.random() * (Math.floor(max * 0.75 + 1) - k)) + k;
       } else {
-        k = Math.floor(Math.random() * (21 - k)) + k;
+        k = Math.floor(Math.random() * (max + 1 - k)) + k;
       }
       const tempBar = {
         key: j, value: k, color: '#f54141', index: j, sorted: false, height: 0,
@@ -39,15 +41,15 @@ export function makeRandomList(howSorted = 'random'): GraphBar[] {
   function nearlyIncreasing(): GraphBar[] {
     let k = 0;
     const tempList: GraphBar[] = [];
-    for (let j = 0; j < 10; j += 1) {
-      if (j <= 2) {
-        k = Math.floor(Math.random() * (3 - k)) + k;
-      } else if (j <= 5) {
-        k = Math.floor(Math.random() * (8 - k)) + k;
-      } else if (j <= 8) {
-        k = Math.floor(Math.random() * (13 - k)) + k;
+    for (let j = 0; j < size; j += 1) {
+      if (j <= Math.floor(size / 4)) {
+        k = Math.floor(Math.random() * (Math.floor(max / 5) - k)) + k;
+      } else if (j <= Math.floor(size / 2)) {
+        k = Math.floor(Math.random() * (Math.floor(max * 0.4) - k)) + k;
+      } else if (j <= Math.floor(size * 0.75)) {
+        k = Math.floor(Math.random() * (Math.floor(max * 0.6) - k)) + k;
       } else {
-        k = Math.floor(Math.random() * (18 - k)) + k;
+        k = Math.floor(Math.random() * (Math.floor(max * 0.8) - k)) + k;
       }
       const tempBar = {
         key: j, value: k + Math.floor(Math.random() * 4), color: '#f54141', index: j, sorted: false, height: 0,
@@ -58,14 +60,16 @@ export function makeRandomList(howSorted = 'random'): GraphBar[] {
   }
   function decreasing(): GraphBar[] {
     const tempList: GraphBar[] = [];
-    let k = 21;
-    for (let j = 0; j < 10; j += 1) {
-      if (j <= 2) {
-        k = Math.floor(Math.random() * (k - 16)) + 16;
-      } else if (j <= 5) {
-        k = Math.floor(Math.random() * (k - 11)) + 11;
-      } else if (j <= 8) {
-        k = Math.floor(Math.random() * (k - 6)) + 6;
+    let k = max;
+    for (let j = 0; j < size; j += 1) {
+      if (j <= Math.floor(size / 4)) {
+        k = Math.floor(Math.random() * (k - Math.floor(max * 0.75 + 1)))
+        + Math.floor(max * 0.75 + 1);
+      } else if (j <= Math.floor(size / 2)) {
+        k = Math.floor(Math.random() * (k - Math.floor(max * 0.5 + 1))) + Math.floor(max * 0.5 + 1);
+      } else if (j <= Math.floor(size * 0.75)) {
+        k = Math.floor(Math.random() * (k - Math.floor(max * 0.25 + 1)))
+        + Math.floor(max * 0.25 + 1);
       } else {
         k = Math.floor(Math.random() * (k)) + 0;
       }
@@ -78,14 +82,14 @@ export function makeRandomList(howSorted = 'random'): GraphBar[] {
   }
   function nearlyDecreasing(): GraphBar[] {
     const tempList: GraphBar[] = [];
-    let k = 18;
-    for (let j = 0; j < 10; j += 1) {
-      if (j <= 2) {
-        k = Math.floor(Math.random() * (k - 15)) + 15;
-      } else if (j <= 5) {
-        k = Math.floor(Math.random() * (k - 10)) + 10;
-      } else if (j <= 8) {
-        k = Math.floor(Math.random() * (k - 5)) + 5;
+    let k = Math.floor(max * 0.9);
+    for (let j = 0; j < size; j += 1) {
+      if (j <= Math.floor(size / 4)) {
+        k = Math.floor(Math.random() * (k - Math.floor(max * 0.75))) + Math.floor(max * 0.75);
+      } else if (j <= Math.floor(size / 2)) {
+        k = Math.floor(Math.random() * (k - Math.floor(max * 0.5))) + Math.floor(max * 0.5);
+      } else if (j <= Math.floor(size * 0.75)) {
+        k = Math.floor(Math.random() * (k - Math.floor(max * 0.25))) + Math.floor(max * 0.25);
       } else {
         k = Math.floor(Math.random() * (k)) + 0;
       }
@@ -214,6 +218,9 @@ export const sort = (list: GraphBar[], sortName: string): Process[] => {
       break;
     case 'MSort':
       process = mergeSort(list, keyList);
+      break;
+    case 'HSort':
+      process = heapSort(list);
       break;
     default:
       break;

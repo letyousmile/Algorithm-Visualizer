@@ -28,16 +28,19 @@ let wholeSearchProcess: GProcess[];
 let processLength: number;
 let initialization = false;
 
-function GraphView(): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function GraphView(info: any): JSX.Element {
+  const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
-  const data = makeGraph('low');
+  const data = makeGraph('normal');
   const [graphNodes, setGraphNodes] = useState<Node[]>(data[0]);
   const [graphLines, setGraphLines] = useState<Map<string, Line>>(data[1]);
+  const [list, setList] = useState<number[]>([]);
 
   if (graphNodes !== undefined) {
     if (initialization) {
-      wholeSearchProcess = search(graphNodes, 'bfs');
+      wholeSearchProcess = search(graphNodes, pathName);
       processLength = wholeSearchProcess.length;
     }
   }
@@ -59,17 +62,16 @@ function GraphView(): JSX.Element {
       if (depth < processLength && depth > -1) {
         // 현재 depth 저장.
         setDepth(depth);
-        console.log(wholeSearchProcess[depth]);
         const temp = rendering(graphNodes, graphLines, wholeSearchProcess[depth]);
         setGraphNodes(temp[0]);
         setGraphLines((temp[1]));
-        console.log(graphNodes);
+        setList(wholeSearchProcess[depth].list);
       }
     }
   }
 
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
-  function makeRandomNumber(density = 'low'): void {
+  function makeRandomNumber(density = 'normal'): void {
     const temp = makeGraph(density);
     setGraphNodes(temp[0]);
     setGraphLines(temp[1]);
@@ -140,15 +142,13 @@ function GraphView(): JSX.Element {
         <IconButton aria-label="skipNext" onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>
           <SkipNextIcon />
         </IconButton>
-        {!toggle && <Button className={classes.button} size="medium" onClick={(): void => { if (!toggle) { setToggle(true); } else { setToggle(false); } }}>배열생성</Button>}
+        {!toggle && <Button className={classes.button} size="medium" onClick={(): void => { if (!toggle) { setToggle(true); } else { setToggle(false); } }}>그래프생성</Button>}
         {toggle
           && (
             <div>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(); stop(); }}>난수배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('increasing'); stop(); }}>증가배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('decreasing'); stop(); }}>감소배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('nearlyIncreasing'); stop(); }}>상승세배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('nearlyDecreasing'); stop(); }}>하강세배열</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('low'); stop(); }}>듬성하게</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('normal'); stop(); }}>중간</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('high'); stop(); }}>촘촘하게</Button>
             </div>
           )}
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
@@ -159,7 +159,11 @@ function GraphView(): JSX.Element {
         justifyContent: 'center',
       }}
       >
-        <GraphNodes graphNodes={graphNodes} graphLines={Array.from(graphLines.values())} />
+        <GraphNodes
+          graphNodes={graphNodes}
+          graphLines={Array.from(graphLines.values())}
+          list={list}
+        />
       </div>
     </div>
   );

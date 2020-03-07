@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,9 +7,10 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
-import SortBars from './SortBars';
-import { GraphBar, Process } from '../../util';
-import { makeRandomList, sort, rendering } from './UtilFunction';
+
+import FixedGraphNodes from './FixedGraphNodes';
+import { FixedNode, WeightedLine, GProcess } from '../../util';
+import { makeFixedGraph, fixedRendering, find } from './UtilFunction';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,24 +23,24 @@ let playing = false;
 let speed = 1000;
 
 // 소팅 알고리즘의 현재 진행 정도를 저장해 놓는 변수.
-let wholeSortProcess: Process[];
+let wholeSearchProcess: GProcess[];
 // 소팅 알고리즘 상태를 기억하는 배열의 길이 변수화.
 let processLength: number;
 let initialization = false;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function SortView(info: any): JSX.Element {
+function FixedGraphView(info: any): JSX.Element {
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
-  // 리스트 초기 변수
-  const [graphBars, setBar] = useState<GraphBar[]>(makeRandomList());
-
-  if (graphBars !== undefined) {
+  const data = makeFixedGraph(0);
+  const [graphNodes, setGraphNodes] = useState<FixedNode[]>(data[0]);
+  const [graphLines, setGraphLines] = useState<Map<string, WeightedLine>>(data[1]);
+  const [list, setList] = useState<number[]>([]);
+  if (graphNodes !== undefined) {
     if (initialization) {
-      console.log('정렬다시함');
-      wholeSortProcess = sort(graphBars, pathName);
-      processLength = wholeSortProcess.length;
+      wholeSearchProcess = find(graphNodes, graphLines, 0, pathName);
+      processLength = wholeSearchProcess.length;
     }
   }
 
@@ -57,21 +57,23 @@ function SortView(info: any): JSX.Element {
     initialization = false;
     // stop이 눌러졌는지 확인.
     if (playing) {
-      console.log(processLength);
       // 상태기억 배열의 길이를 벗어하는 depth가 들어왔는지 확인.
       if (depth < processLength && depth > -1) {
         // 현재 depth 저장.
         setDepth(depth);
-        setBar(rendering(graphBars, wholeSortProcess[depth]));
+        const temp = fixedRendering(graphNodes, graphLines, wholeSearchProcess[depth]);
+        setGraphNodes(temp[0]);
+        setGraphLines((temp[1]));
+        setList(wholeSearchProcess[depth].list);
       }
     }
   }
 
   // 랜덤 번호 생성 함수. 처음 렌더링 할때 과정을 함수에 저장함.
-  function makeRandomNumber(howSorted = 'random'): void {
-    const temp: GraphBar[] = makeRandomList(howSorted);
-    console.log(temp);
-    setBar(temp);
+  function makeRandomNumber(type: number): void {
+    const temp = makeFixedGraph(type);
+    setGraphNodes(temp[0]);
+    setGraphLines(temp[1]);
     setDepth(0);
     initialization = true;
   }
@@ -86,8 +88,8 @@ function SortView(info: any): JSX.Element {
   // 멈춤 flag를 해제하는 함수.(진행하는 함수 아니고 멈춤을 해제하는거임)
   function play(): void {
     if (processLength === undefined) {
-      wholeSortProcess = sort(graphBars, pathName);
-      processLength = wholeSortProcess.length;
+      wholeSearchProcess = find(graphNodes, graphLines, 0, pathName);
+      processLength = wholeSearchProcess.length;
     }
     playing = true;
     setNowPlaying(playing);
@@ -113,11 +115,11 @@ function SortView(info: any): JSX.Element {
   if (!playing) {
     initialization = true;
   }
-
   return (
-    <div style={{
-      height: '700px',
-    }}
+    <div
+      style={{
+        height: '700px',
+      }}
     >
       <div style={{
         display: 'flex',
@@ -139,15 +141,13 @@ function SortView(info: any): JSX.Element {
         <IconButton aria-label="skipNext" onClick={(): void => { if (!playing) { play(); goTo(nowDepth + 1); stop(); } }}>
           <SkipNextIcon />
         </IconButton>
-        {!toggle && <Button className={classes.button} size="medium" onClick={(): void => { if (!toggle) { setToggle(true); } else { setToggle(false); } }}>배열생성</Button>}
+        {!toggle && <Button className={classes.button} size="medium" onClick={(): void => { if (!toggle) { setToggle(true); } else { setToggle(false); } }}>그래프생성</Button>}
         {toggle
           && (
             <div>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(); stop(); }}>난수배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('increasing'); stop(); }}>증가배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('decreasing'); stop(); }}>감소배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('nearlyIncreasing'); stop(); }}>상승세배열</Button>
-              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber('nearlyDecreasing'); stop(); }}>하강세배열</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(0); stop(); }}>1</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(0); stop(); }}>2</Button>
+              <Button className={classes.button} color="primary" size="medium" onClick={(): void => { makeRandomNumber(0); stop(); }}>3</Button>
             </div>
           )}
         <Button className={classes.button} size="medium" onClick={(): void => { if (speed < 2000) { speed += 100; } }}>느리게</Button>
@@ -156,13 +156,15 @@ function SortView(info: any): JSX.Element {
       <div style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-end',
       }}
       >
-        <SortBars graphBars={graphBars} />
+        <FixedGraphNodes
+          graphNodes={graphNodes}
+          graphLines={Array.from(graphLines.values())}
+          list={list}
+        />
       </div>
     </div>
   );
 }
-
-export default SortView;
+export default FixedGraphView;

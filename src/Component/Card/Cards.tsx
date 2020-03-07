@@ -65,10 +65,58 @@ const items = [
   },
   {
     index: 5,
-    name: '그래프',
-    path: '/Graph',
+    name: '힙정렬',
+    path: '/HSort',
     img: '',
-    desc: '그랲그랲'
+    desc: '최대힙, 최소힙의 첫번째 노드가 항상 최대값 또는 최소값을 가지는 성질을 이용한 정렬입니다.'
+    + '최대힙, 최소힙을 만들고 첫번째 노드를 pop 하는 방식으로 작동합니다.',
+  },
+  {
+    index: 6,
+    name: '너비 우선 탐색(BFS, Breath First Search)',
+    path: '/bfs',
+    img: '',
+    desc: '너비너비너비아니'
+    + '그랲',
+  },
+  {
+    index: 7,
+    name: '깊이 우선 탐색(DFS, Depth First Search)',
+    path: '/dfs',
+    img: '',
+    desc: '기피기피기피'
+    + '그랲',
+  },
+  {
+    index: 8,
+    name: '최소 신장 트리(Minimum Spanning Tree, MST) 프림(Prim) 알고리즘',
+    path: '/prim',
+    img: '',
+    desc: '프림프림'
+    + '그랲',
+  },
+  {
+    index: 9,
+    name: '최소 신장 트리(Minimum Spanning Tree, MST) 크루스칼(Kruskal) 알고리즘',
+    path: '/kruskal',
+    img: '',
+    desc: '크루크루'
+    + '그랲',
+  },
+  {
+    index: 10,
+    name: '길 찾기(Path Finding) 다익스트라(Dijkstra) 알고리즘',
+    path: '/dijkstra',
+    img: '',
+    desc: '다다익선'
+    + '그랲',
+  },
+  {
+    index: 11,
+    name: '길 찾기(Path Finding) 벨만포드(Bellman-Ford) 알고리즘',
+    path: '/bellmanFord',
+    img: '',
+    desc: '벨포드'
     + '그랲',
   },
 ];

@@ -4,6 +4,7 @@ import Main from '../Main';
 import SortView from '../Component/Sort/SortView';
 import HSort from '../Component/Sort/HeapSort';
 import GraphView from '../Component/Graph/GraphView';
+import FixedGraphView from '../Component/Graph/FixedGraphView';
 
 function Routes(): JSX.Element {
   return (
@@ -16,7 +17,12 @@ function Routes(): JSX.Element {
         <Route path="/MSort" component={SortView} />
         <Route path="/QSort" component={SortView} />
         <Route path="/HSort" component={HSort} />
-        <Route path="/Graph" component={GraphView} />
+        <Route path="/bfs" component={GraphView} />
+        <Route path="/dfs" component={GraphView} />
+        <Route path="/prim" component={FixedGraphView} />
+        <Route path="/kruskal" component={FixedGraphView} />
+        <Route path="/dijkstra" component={FixedGraphView} />
+        <Route path="/bellmanFord" component={FixedGraphView} />
       </Switch>
     </Router>
   );
