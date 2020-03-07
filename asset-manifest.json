@@ -1,22 +1,33 @@
 {
   "files": {
     "main.css": "/Algorithm-Visualizer/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/Algorithm-Visualizer/static/js/main.1624a69c.chunk.js",
-    "main.js.map": "/Algorithm-Visualizer/static/js/main.1624a69c.chunk.js.map",
+    "main.js": "/Algorithm-Visualizer/static/js/main.f2eb037b.chunk.js",
+    "main.js.map": "/Algorithm-Visualizer/static/js/main.f2eb037b.chunk.js.map",
     "runtime-main.js": "/Algorithm-Visualizer/static/js/runtime-main.02d3d39d.js",
     "runtime-main.js.map": "/Algorithm-Visualizer/static/js/runtime-main.02d3d39d.js.map",
-    "static/js/2.4986eb90.chunk.js": "/Algorithm-Visualizer/static/js/2.4986eb90.chunk.js",
-    "static/js/2.4986eb90.chunk.js.map": "/Algorithm-Visualizer/static/js/2.4986eb90.chunk.js.map",
+    "static/js/2.ef0a5774.chunk.js": "/Algorithm-Visualizer/static/js/2.ef0a5774.chunk.js",
+    "static/js/2.ef0a5774.chunk.js.map": "/Algorithm-Visualizer/static/js/2.ef0a5774.chunk.js.map",
     "index.html": "/Algorithm-Visualizer/index.html",
-    "precache-manifest.41d1e96a4526108ae57769e7f64dd915.js": "/Algorithm-Visualizer/precache-manifest.41d1e96a4526108ae57769e7f64dd915.js",
+    "precache-manifest.055ec32a02e66ad57a4df107c76ae20d.js": "/Algorithm-Visualizer/precache-manifest.055ec32a02e66ad57a4df107c76ae20d.js",
     "service-worker.js": "/Algorithm-Visualizer/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/Algorithm-Visualizer/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.4986eb90.chunk.js.LICENSE.txt": "/Algorithm-Visualizer/static/js/2.4986eb90.chunk.js.LICENSE.txt"
+    "static/js/2.ef0a5774.chunk.js.LICENSE.txt": "/Algorithm-Visualizer/static/js/2.ef0a5774.chunk.js.LICENSE.txt",
+    "static/media/bfs.png": "/Algorithm-Visualizer/static/media/bfs.1979018d.png",
+    "static/media/bubble_sort.png": "/Algorithm-Visualizer/static/media/bubble_sort.a9805ee3.png",
+    "static/media/dfs.png": "/Algorithm-Visualizer/static/media/dfs.d4ddc889.png",
+    "static/media/dijkstra.png": "/Algorithm-Visualizer/static/media/dijkstra.0bf8f90a.png",
+    "static/media/heap_sort.png": "/Algorithm-Visualizer/static/media/heap_sort.038346d5.png",
+    "static/media/insertion_sort.png": "/Algorithm-Visualizer/static/media/insertion_sort.6c78b011.png",
+    "static/media/kruskal.png": "/Algorithm-Visualizer/static/media/kruskal.9ffd5a54.png",
+    "static/media/merge_sort.png": "/Algorithm-Visualizer/static/media/merge_sort.88fed517.png",
+    "static/media/prim.png": "/Algorithm-Visualizer/static/media/prim.76a01e1f.png",
+    "static/media/quick_sort.png": "/Algorithm-Visualizer/static/media/quick_sort.9955aa9b.png",
+    "static/media/selection_sort.png": "/Algorithm-Visualizer/static/media/selection_sort.a383c762.png"
   },
   "entrypoints": [
     "static/js/runtime-main.02d3d39d.js",
-    "static/js/2.4986eb90.chunk.js",
+    "static/js/2.ef0a5774.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.1624a69c.chunk.js"
+    "static/js/main.f2eb037b.chunk.js"
   ]
 }
