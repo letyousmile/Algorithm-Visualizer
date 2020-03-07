@@ -181,6 +181,15 @@ export function fixedRendering(nodeList: FixedNode[], lineMap: Map<string, Weigh
   for (let i = 0; i < NVisited.length; i += 1) {
     NList[NVisited[i]].color = '#2ee22e';
   }
+  if (process.phase === 'compare') {
+    const line = LMap.get(process.targetLine);
+    if (line !== undefined) {
+      line.color = 'orange';
+      LMap.set(process.targetLine, line);
+    }
+    NList[NTargets[0]].color = '#2ee22e';
+    NList[NTargets[1]].color = 'orange';
+  }
   for (let i = 0; i < LVisited.length; i += 1) {
     const line = LMap.get(LVisited[i]);
     if (line !== undefined) {

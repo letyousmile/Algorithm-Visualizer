@@ -36,6 +36,7 @@ function FixedGraphView(info: any): JSX.Element {
   const data = makeFixedGraph(0);
   const [graphNodes, setGraphNodes] = useState<FixedNode[]>(data[0]);
   const [graphLines, setGraphLines] = useState<Map<string, WeightedLine>>(data[1]);
+  const [list, setList] = useState<number[]>([]);
   if (graphNodes !== undefined) {
     if (initialization) {
       wholeSearchProcess = find(graphNodes, graphLines, 0, pathName);
@@ -63,6 +64,7 @@ function FixedGraphView(info: any): JSX.Element {
         const temp = fixedRendering(graphNodes, graphLines, wholeSearchProcess[depth]);
         setGraphNodes(temp[0]);
         setGraphLines((temp[1]));
+        setList(wholeSearchProcess[depth].list);
       }
     }
   }
@@ -159,6 +161,7 @@ function FixedGraphView(info: any): JSX.Element {
         <FixedGraphNodes
           graphNodes={graphNodes}
           graphLines={Array.from(graphLines.values())}
+          list={list}
         />
       </div>
     </div>
