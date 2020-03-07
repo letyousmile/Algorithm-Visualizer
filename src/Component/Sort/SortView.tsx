@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -29,6 +29,7 @@ let initialization = false;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SortView(info: any): JSX.Element {
+  console.log(initialization);
   const pathName = info.location.pathname.substr(1);
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
@@ -105,6 +106,16 @@ function SortView(info: any): JSX.Element {
       }
     }
   };
+
+  useEffect(() => () => {
+    function init(): void {
+      playing = false;
+      setNowPlaying(playing);
+      initialization = false;
+    }
+    init();
+  }, []);
+
   // 다른 화면으로 넘어갈 때는 초기화
   if (!playing) {
     initialization = true;
@@ -112,7 +123,7 @@ function SortView(info: any): JSX.Element {
 
   return (
     <div style={{
-      height: '700px',
+      height: window.innerHeight,
     }}
     >
       <div style={{

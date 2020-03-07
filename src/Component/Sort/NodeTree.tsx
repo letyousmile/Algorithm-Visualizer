@@ -15,7 +15,7 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
     const positionInCurDepth = (graphNode.index + 1) - nodeCntInCurDepth;
     const getXPosition = positionInCurDepth * widthInterval
       - (widthInterval / 2) * (nodeCntInCurDepth - 1) - 25 + window.innerWidth / 2;
-    const getYPosition = currentDepth * 100 + 100;
+    const getYPosition = currentDepth * (window.innerHeight / 10) + (window.innerHeight / 10);
 
     return (
       <div
@@ -50,7 +50,7 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
   const sortedNode = sortedNodes.map((graphNode: GraphBar) => (
     <div
       style={{
-        bottom: '250px',
+        bottom: `${window.innerHeight / 4}PX`,
         position: 'absolute',
         width: '50px',
         height: '50px',
@@ -88,10 +88,12 @@ function NodeTree({ graphNodes, sortedNodes, lines }: any): JSX.Element {
     const positionInCurDepthFrom = (line.from + 1) - nodeCntInCurDepthFrom;
     const getXPositionTo = positionInCurDepthTo * widthIntervalTo
       - (widthIntervalTo / 2) * (nodeCntInCurDepthTo - 1) + window.innerWidth / 2;
-    const getYPositionTo = currentDepthTo * 100 + 125;
+    const getYPositionTo = currentDepthTo * (window.innerHeight / 10)
+      + (window.innerHeight / 10) + 25;
     const getXPositionFrom = positionInCurDepthFrom * widthIntervalFrom
       - (widthIntervalFrom / 2) * (nodeCntInCurDepthFrom - 1) + window.innerWidth / 2;
-    const getYPositionFrom = currentDepthFrom * 100 + 125;
+    const getYPositionFrom = currentDepthFrom * (window.innerHeight / 10)
+      + (window.innerHeight / 10) + 25;
     return (
       <line
         x1={`${getXPositionTo}px`}

@@ -16,6 +16,7 @@ function FixedGraphNodes({ graphNodes, graphLines, list }: any): JSX.Element {
       textAnchor="middle"
       stroke="red"
       dy=".1em"
+      // eslint-disable-next-line react/no-array-index-key
       key={i}
     >
       {minimum !== 999999 ? minimum : '∞'}
@@ -51,11 +52,7 @@ function FixedGraphNodes({ graphNodes, graphLines, list }: any): JSX.Element {
   ));
   return (
     <div>
-      <svg height="900" width="1600">
-        <circle cx={window.innerWidth / 5} cy={window.innerHeight / 5} r="30" strokeWidth="1" fill="#2ee22e" />
-        <text x={window.innerWidth / 5 + 100} y={window.innerHeight / 5} textAnchor="middle" strokeWidth="1" stroke="black" dy=".1em">확정노드</text>
-        <circle cx={window.innerWidth / 5} cy={window.innerHeight / 5 + 100} r="30" strokeWidth="1" fill="orange" />
-        <text x={window.innerWidth / 5 + 100} y={window.innerHeight / 5 + 100} textAnchor="middle" strokeWidth="1" stroke="black" dy=".1em">비교노드</text>
+      <svg height="900" width={window.innerWidth}>
         {lines}
         {nodes}
         {nowMin}
