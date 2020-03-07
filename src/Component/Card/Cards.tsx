@@ -111,14 +111,6 @@ const items = [
     desc: '다다익선'
     + '그랲',
   },
-  {
-    index: 11,
-    name: '길 찾기(Path Finding) 벨만포드(Bellman-Ford) 알고리즘',
-    path: '/bellmanFord',
-    img: '',
-    desc: '벨포드'
-    + '그랲',
-  },
 ];
 
 function Cards(): JSX.Element {
