@@ -2,12 +2,24 @@ import React from 'react';
 import { FixedNode, WeightedLine } from '../../util';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function FixedGraphNodes({ graphNodes, graphLines }: any): JSX.Element {
+function FixedGraphNodes({ graphNodes, graphLines, list }: any): JSX.Element {
   const nodes = graphNodes.map((node: FixedNode) => (
     <g key={node.key}>
       <circle cx={node.x + window.innerWidth / 3} cy={node.y + window.innerHeight / 5} r="30" stroke="black" strokeWidth="1" fill={node.color} key={node.key} />
-      <text x={node.x + window.innerWidth / 3} y={node.y + window.innerHeight / 5} textAnchor="middle" stroke="white" dy=".4em">{node.key}</text>
+      <text x={node.x + window.innerWidth / 3} y={node.y + window.innerHeight / 5} textAnchor="middle" stroke="white" dy=".4em" key={`text${node.key}`}>{node.key}</text>
     </g>
+  ));
+  const nowMin = list.map((minimum: number, i: number) => (
+    <text
+      x={graphNodes[i].x + window.innerWidth / 3 - 10}
+      y={graphNodes[i].y + window.innerHeight / 5 - 40}
+      textAnchor="middle"
+      stroke="red"
+      dy=".1em"
+      key={i}
+    >
+      {minimum !== 999999 ? minimum : '∞'}
+    </text>
   ));
   const lines = graphLines.map((line: WeightedLine) => (
     <g key={line.key}>
@@ -40,8 +52,13 @@ function FixedGraphNodes({ graphNodes, graphLines }: any): JSX.Element {
   return (
     <div>
       <svg height="900" width="1600">
+        <circle cx={window.innerWidth / 5} cy={window.innerHeight / 5} r="30" strokeWidth="1" fill="#2ee22e" />
+        <text x={window.innerWidth / 5 + 100} y={window.innerHeight / 5} textAnchor="middle" strokeWidth="1" stroke="black" dy=".1em">확정노드</text>
+        <circle cx={window.innerWidth / 5} cy={window.innerHeight / 5 + 100} r="30" strokeWidth="1" fill="orange" />
+        <text x={window.innerWidth / 5 + 100} y={window.innerHeight / 5 + 100} textAnchor="middle" strokeWidth="1" stroke="black" dy=".1em">비교노드</text>
         {lines}
         {nodes}
+        {nowMin}
       </svg>
     </div>
   );
