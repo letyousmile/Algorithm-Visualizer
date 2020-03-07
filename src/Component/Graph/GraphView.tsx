@@ -113,7 +113,7 @@ function GraphView(info: any): JSX.Element {
     }
   };
 
-  useEffect(() => () => {
+  useEffect(() => (): void => {
     function init(): void {
       playing = false;
       setNowPlaying(playing);
