@@ -97,7 +97,7 @@ export function find(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
       process = kruskal(nodeList, lineMap, from);
       break;
     case 'dijkstra':
-      process = dijkstra(nodeList, lineMap, from, to);
+      process = dijkstra(nodeList, lineMap, from);
       break;
     case 'bellmanFord':
       process = bellmanFord(nodeList, lineMap, from, to);

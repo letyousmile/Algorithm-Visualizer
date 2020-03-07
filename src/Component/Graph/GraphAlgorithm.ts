@@ -238,8 +238,97 @@ export function kruskal(nodeList: FixedNode[], lineMap: Map<string, WeightedLine
 }
 
 export function dijkstra(nodeList: FixedNode[], lineMap: Map<string, WeightedLine>,
-  from: number, to: number): GProcess[] {
+  from: number): GProcess[] {
   const process: GProcess[] = [];
+  const table: number[][] = [];
+  const visited: boolean[] = new Array<boolean>(nodeList.length);
+  const nowMinTo: number[] = new Array<number>(nodeList.length);
+  const visitedNode: number[] = [];
+  const visitedLine: string[] = [];
+  let targetLine = '';
+  process.push({
+    visitedNode: visitedNode.slice(),
+    visitedLine: visitedLine.slice(),
+    targetNodes: [],
+    targetLine,
+    phase: 'start',
+    list: [],
+  });
+  for (let i = 0; i < nodeList.length; i += 1) {
+    nowMinTo[i] = 999999;
+    visited[i] = false;
+  }
+  nowMinTo[from] = 0;
+  let now = from;
+  visited[now] = true;
+
+  visitedNode.push(now);
+  process.push({
+    visitedNode: visitedNode.slice(),
+    visitedLine: visitedLine.slice(),
+    targetNodes: [now, now],
+    targetLine,
+    phase: 'visit',
+    list: [],
+  });
+
+  table.push(nowMinTo.slice());
+  const flag = true;
+  while (flag) {
+    const connection = nodeList[now].connected;
+    for (let i = 0; i < connection.length; i += 1) {
+      const lineKey = now < connection[i] ? `${now}to${connection[i]}` : `${connection[i]}to${now}`;
+      visitedNode.push(now);
+      nowMinTo[connection[i]] = Math.min(nowMinTo[connection[i]]
+        , (nowMinTo[now] + lineMap.get(lineKey)!.weight));
+
+      targetLine = lineKey;
+      process.push({
+        visitedNode: visitedNode.slice(),
+        visitedLine: visitedLine.slice(),
+        targetNodes: [now, connection[i]],
+        targetLine,
+        phase: 'compare',
+        list: nowMinTo.slice(),
+      });
+    }
+    let nowMin = 999999;
+    let finish = true;
+    for (let i = 0; i < nodeList.length; i += 1) {
+      if (!visited[i]) {
+        if (nowMinTo[i] < nowMin) {
+          finish = false;
+          nowMin = nowMinTo[i];
+        }
+      }
+    }
+    table.push(nowMinTo.slice());
+    if (finish) {
+      break;
+    } else {
+      now = nowMinTo.indexOf(nowMin);
+      visited[now] = true;
+
+      visitedNode.push(now);
+      process.push({
+        visitedNode: visitedNode.slice(),
+        visitedLine: visitedLine.slice(),
+        targetNodes: [now, now],
+        targetLine,
+        phase: 'visit',
+        list: nowMinTo.slice(),
+      });
+    }
+  }
+  process.push({
+    visitedNode: visitedNode.slice(),
+    visitedLine: visitedLine.slice(),
+    targetNodes: [],
+    targetLine,
+    phase: 'done',
+    list: nowMinTo.slice(),
+  });
+  console.log('table', table);
   return process;
 }
 

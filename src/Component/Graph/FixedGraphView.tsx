@@ -38,6 +38,7 @@ function FixedGraphView(info: any): JSX.Element {
   if (graphNodes !== undefined) {
     if (initialization) {
       wholeSearchProcess = find(graphNodes, graphLines, 0, 5, pathName);
+      console.log('1');
       processLength = wholeSearchProcess.length;
     }
   }
