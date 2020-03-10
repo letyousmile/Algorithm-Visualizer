@@ -178,7 +178,7 @@ function HSort(): JSX.Element {
 
   return (
     <div style={{
-      height: '700px',
+      height: window.innerHeight,
     }}
     >
       <div style={{
