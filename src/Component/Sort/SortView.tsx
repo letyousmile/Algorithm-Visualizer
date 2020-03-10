@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -106,6 +106,16 @@ function SortView(info: any): JSX.Element {
       }
     }
   };
+
+  useEffect(() => () => {
+    function init(): void {
+      playing = false;
+      setNowPlaying(playing);
+      initialization = false;
+    }
+    init();
+  }, []);
+
   // 다른 화면으로 넘어갈 때는 초기화
   if (!playing) {
     initialization = true;
