@@ -165,7 +165,7 @@ export function rendering(list: GraphBar[], process: Process): GraphBar[] {
       } else if (process.phase === 'insrt-compare') {
         if (list[process.arr[i]].index
           === process.targets[1]) {
-          list[process.arr[i]].height = 50;
+          list[process.arr[i]].height = -50;
           list[process.arr[i]].color = '#ff9400';
         } else if (list[process.arr[i]].index
           === process.targets[0]) {
@@ -188,7 +188,7 @@ export function rendering(list: GraphBar[], process: Process): GraphBar[] {
           && list[process.arr[i]].height === 0) {
           const changeTo = process.targets[0];
           list[process.arr[i]].index = changeTo;
-          list[process.arr[i]].height = 50;
+          list[process.arr[i]].height = -50;
           list[process.arr[i]].color = '#ff9400';
         }
       } else if (process.phase === 'start') {
