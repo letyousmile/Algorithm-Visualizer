@@ -5,41 +5,40 @@ import { GraphBar } from '../../util';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SortBar({ graphBars }: any): JSX.Element {
   const SortBars = graphBars.map((graphBar: GraphBar) => (
-    <div
-      style={{
-        position: 'absolute',
-        width: '50px',
-        height: `${(graphBar.value * 20) + 50}px`,
-        backgroundColor: graphBar.color,
-        textAlign: 'center',
-        color: 'black',
-        border: '1px solid black',
-        transform: `translate(${graphBar.index * 50 - graphBars.length * 25}px, ${window.innerHeight * 0.6 + graphBar.height!}px)`,
-        WebkitTransition: ' -webkit-transform 0.2s',
-        transition: 'transform 0.2s',
-      }}
-      key={graphBar.key.toString()}
-    >
-      <h1
-        style={{
-          marginBlockStart: '0',
-          marginBlockEnd: '0',
-        }}
-      >
-        {graphBar.value}
-      </h1>
-    </div>
-  ));
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'flex-start',
-      flexDirection: 'column-reverse',
-      position: 'absolute',
-      top: '200px',
+    <g style={{
+      transform: `translate(${window.innerWidth * 0.5 + graphBar.index * 50 - graphBars.length * 25}px, ${window.innerHeight * 0.6 - graphBar.height! - (graphBar.value * 20)}px)`,
+      WebkitTransition: ' -webkit-transform 0.2s',
+      transition: 'transform 0.2s',
     }}
     >
-      {SortBars}
+      <rect
+        width="50px"
+        height={`${(graphBar.value * 20) + 50}px`}
+        style={{
+          fill: graphBar.color,
+          stroke: 'black',
+        }}
+        key={graphBar.key.toString()}
+      />
+      <text
+        x={25}
+        y={20}
+        textAnchor="middle"
+        stroke="white"
+        strokeWidth="1"
+        fill="white"
+        dy=".1em"
+        key={graphBar.key}
+      >
+        {graphBar.value}
+      </text>
+    </g>
+  ));
+  return (
+    <div>
+      <svg width={window.innerWidth} height="700">
+        {SortBars}
+      </svg>
     </div>
   );
 }
